@@ -112,8 +112,9 @@
                 <h2
                     class="text-4xl md:text-5xl lg:text-5xl font-heading font-black mt-4 mb-8 uppercase leading-tight text-white">
                     {{ about.title }} <br /><span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">{{ about.highlight_title }}</span>
-                        
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">{{
+                        about.highlight_title }}</span>
+
                 </h2>
 
                 <div class="space-y-6 text-gray-400 text-lg leading-relaxed font-light mb-12">
@@ -452,14 +453,18 @@
                     class="text-[6rem] md:text-[8rem] font-heading font-black text-white/5 absolute -top-4 -right-4 pointer-events-none select-none tracking-tighter">
                     POINT</h3>
 
-                <h3 class="text-4xl md:text-5xl font-heading font-black mb-3 relative z-10">Point Athletics</h3>
+                <h3 class="text-4xl md:text-5xl font-heading font-black mb-3 relative z-10">
+                    {% if studios.0 %}{{ studios.0.name }}{% else %}Point Athletics{% endif %}
+                </h3>
                 <p
                     class="text-accent text-sm md:text-base font-bold mb-8 uppercase tracking-widest relative z-10 opacity-80">
-                    İstanbul</p>
+                    {% if studios.0 %}{{ studios.0.location }}{% else %}İstanbul{% endif %}
+                </p>
 
                 <p class="text-gray-300 text-lg leading-relaxed mb-10 relative z-10 border-l-2 border-accent/50 pl-6">
-                    Yetişkinler ve çocuklar için handstand'den jimnastiğe kadar uzanan elit grup dersleri.
-                    Yapılandırılmış güç ve kondisyon protokolleriyle, inkar edilemez bir gelişim için tasarlandı.
+                    {% if studios.0 %}{{ studios.0.description|linebreaksbr }}{% else %}Yetişkinler ve çocuklar için
+                    handstand'den jimnastiğe kadar uzanan elit grup dersleri. Yapılandırılmış güç ve kondisyon
+                    protokolleriyle, inkar edilemez bir gelişim için tasarlandı.{% endif %}
                 </p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 mb-12 relative z-10">
