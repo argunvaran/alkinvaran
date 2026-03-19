@@ -9,11 +9,11 @@ venv/
 env/
 .env
 
-# Database (PostgreSQL will be used in Prod, but SQLite might be kept locally if needed)
-db.sqlite3
+# Database
+# db.sqlite3 (Sunucuya aktarılabilmesi için git'e eklendi)
 
 # Media and Static
-media/
+# media/ (Sunucuya aktarılabilmesi için git'e eklendi)
 staticfiles/
 
 # System Files
