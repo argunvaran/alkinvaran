@@ -1,0 +1,235 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}Dersler{% endblock %}
+
+{% block content %}
+<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+        <h2 class="text-3xl font-heading font-black tracking-tight text-white uppercase">
+            <span class="text-accent">DERSLER</span>
+        </h2>
+        <p class="text-gray-400 mt-2 font-medium">Sistemdeki grup ve özel ders haftalık planları</p>
+    </div>
+
+    <button onclick="openAddLessonModal()"
+        class="bg-accent text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-accent-dark transition-all flex items-center gap-2 shadow-lg shadow-accent/20 active:scale-95">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Yeni Ders Ekle
+    </button>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+    {% for lesson in lessons %}
+    <div class="bg-secondary p-8 rounded-[2rem] border border-white/5 relative overflow-hidden group hover:border-accent/40 transition-all duration-500 hover:shadow-2xl hover:shadow-accent/5 flex flex-col min-h-[320px]">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-accent/5 rounded-full blur-[50px] group-hover:bg-accent/15 transition-colors duration-700 pointer-events-none"></div>
+
+        <div class="flex items-start justify-between mb-6 relative z-10">
+            <div class="flex-1 mt-2">
+                <span class="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-widest mb-3 border border-accent/20">
+                    {{ lesson.get_day_of_week_display }} &bull; {{ lesson.time | time:"H:i" }}
+                </span>
+                <h3 class="text-2xl font-heading font-black text-white leading-tight">{{ lesson.name }}</h3>
+            </div>
+
+            <div class="flex flex-col gap-2 shrink-0 ml-4">
+                <button onclick="openEditLesson('{{ lesson.id }}', '{{ lesson.name | escapejs }}', '{{ lesson.day_of_week }}', '{{ lesson.time | time:'H:i' }}', '{{ lesson.notes | escapejs }}')"
+                    class="w-9 h-9 bg-primary/80 border border-white/5 rounded-xl flex items-center justify-center text-gray-500 hover:text-accent hover:border-accent/30 transition-colors shadow-inner"
+                    title="Dersi Düzenle">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
+                </button>
+                <form action="{% url 'crm_lesson_delete' lesson.id %}" method="POST" class="m-0 p-0" onsubmit="return confirm('Bu dersi silmek istediğinize emin misiniz?');">
+                    {% csrf_token %}
+                    <button type="submit" class="w-9 h-9 bg-primary/80 border border-white/5 rounded-xl flex items-center justify-center text-gray-500 hover:text-red-400 hover:border-red-400/30 transition-colors shadow-inner" title="Dersi Sil">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        {% if lesson.notes %}
+        <p class="text-gray-400 text-sm mb-6 border-l-2 border-accent/30 pl-3 leading-relaxed relative z-10 italic">
+            "{{ lesson.notes }}"
+        </p>
+        {% endif %}
+
+        <div class="border-t border-white/10 pt-5 mt-auto relative z-10">
+            <div class="flex items-center justify-between mb-4">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                    Kayıtlı Öğrenciler
+                    <span class="bg-primary/50 text-white px-2 py-0.5 rounded text-xs border border-white/5">
+                        {{ lesson.students.count }}
+                    </span>
+                </h4>
+                <button onclick="openAddStudentModal(this)" data-lesson-id="{{ lesson.id }}" data-lesson-name="{{ lesson.name }}"
+                    class="hover:text-accent text-gray-400 transition-colors group/btn flex items-center gap-1 text-xs font-bold uppercase">
+                    Öğrenci Seç
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+                {% for student in lesson.students.all %}
+                <div class="inline-flex items-center text-sm bg-primary border border-white/5 rounded-lg text-gray-300 transition-all hover:bg-white/5 pr-1 pl-3 py-1">
+                    <span class="mr-2">{{ student.full_name }}</span>
+                    <form method="POST" action="{% url 'crm_lesson_remove_student' lesson.id student.id %}" class="inline m-0 p-0" onsubmit="return confirm('Öğrenciyi dersten çıkarmak istediğinize emin misiniz?');">
+                        {% csrf_token %}
+                        <button type="submit" class="w-6 h-6 rounded flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-400/10 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                {% empty %}
+                <span class="text-sm text-gray-600 italic">Henüz öğrenci kaydedilmemiş.</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center py-20 text-gray-500 bg-secondary/30 rounded-[3rem] border-2 border-dashed border-white/5">
+        <p class="font-heading font-bold text-xl mb-2 text-gray-300">Program Henüz Boş</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div id="add-lesson-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="toggleModal('add-lesson-modal', false)"></div>
+    <div class="bg-secondary border border-white/10 p-8 rounded-[2.5rem] shadow-2xl relative w-full max-w-lg z-10">
+        <h3 id="add-lesson-title" class="text-2xl font-heading font-black text-white mb-6 uppercase tracking-tight">Yeni Ders <span class="text-accent">Oluştur</span></h3>
+        <form id="lesson-form" method="POST" action="{% url 'crm_lesson_create' %}" class="space-y-5">
+            {% csrf_token %}
+            <input type="hidden" name="lesson_id" id="form_lesson_id" value="">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Ders Adı</label>
+                <input type="text" name="name" placeholder="Örn: Çocuk Cimnastik" required class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Gün</label>
+                    <select name="day_of_week" required class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent appearance-none cursor-pointer">
+                        <option value="1">Pazartesi</option>
+                        <option value="2">Salı</option>
+                        <option value="3">Çarşamba</option>
+                        <option value="4">Perşembe</option>
+                        <option value="5">Cuma</option>
+                        <option value="6">Cumartesi</option>
+                        <option value="7">Pazar</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Saat</label>
+                    <input type="time" name="time" required class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Notlar</label>
+                <textarea name="notes" rows="2" class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-accent transition-all"></textarea>
+            </div>
+            <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-white/5">
+                <button type="button" onclick="toggleModal('add-lesson-modal', false)" class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors">Vazgeç</button>
+                <button type="submit" class="px-6 py-3 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="add-student-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="toggleModal('add-student-modal', false)"></div>
+    <div class="bg-secondary border border-white/10 p-8 rounded-[2.5rem] shadow-2xl relative w-full max-w-lg z-10">
+        <h3 class="text-2xl font-heading font-black text-white mb-2 uppercase tracking-tight">Öğrenci <span class="text-accent">Ekle</span></h3>
+        <p id="add-student-lesson-name" class="text-gray-400 text-sm mb-6 border-b border-white/5 pb-4"></p>
+        <form id="add-student-form" method="POST" action="" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Öğrenci Seçin</label>
+                <select name="student_id" id="student_id_select" onchange="toggleNewStudentFields()" class="w-full bg-primary border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-accent cursor-pointer appearance-none">
+                    <option value="">-- Listeden Seçiniz --</option>
+                    {% for s in all_students %}
+                        <option value="{{ s.id }}">{{ s.full_name }}</option>
+                    {% endfor %}
+                    <option value="new" class="font-bold bg-accent/20 text-accent">➕ Yeni Profil Oluştur...</option>
+                </select>
+            </div>
+            <div id="new-student-fields" class="hidden space-y-4 bg-primary/40 p-6 rounded-2xl border border-accent/20 relative mt-2">
+                <input type="text" name="new_student_name" id="new_student_name" placeholder="Ad Soyad" class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none">
+                <input type="text" name="new_student_phone" placeholder="Telefon" class="w-full bg-primary border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none">
+            </div>
+            <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-white/5">
+                <button type="button" onclick="toggleModal('add-student-modal', false)" class="px-6 py-3 rounded-xl border border-white/10 text-gray-400 font-bold hover:bg-white/5 transition-colors">Vazgeç</button>
+                <button type="submit" class="px-6 py-3 rounded-xl bg-accent text-white font-bold shadow-lg shadow-accent/20">Kaydet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleModal(modalId, show) {
+        const modal = document.getElementById(modalId);
+        if (show) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        } else {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    function openAddLessonModal() {
+        document.getElementById('add-lesson-title').innerHTML = `Yeni Ders <span class="text-accent">Oluştur</span>`;
+        document.getElementById('form_lesson_id').value = '';
+        document.getElementById('lesson-form').reset();
+        toggleModal('add-lesson-modal', true);
+    }
+
+    function openEditLesson(id, name, day, time, notes) {
+        document.getElementById('add-lesson-title').innerHTML = `Dersi <span class="text-accent">Düzenle</span>`;
+        document.getElementById('form_lesson_id').value = id;
+        const form = document.getElementById('lesson-form');
+        form.elements['name'].value = name;
+        form.elements['day_of_week'].value = day;
+        form.elements['time'].value = time;
+        form.elements['notes'].value = (notes === "None" || notes === "") ? "" : notes;
+        toggleModal('add-lesson-modal', true);
+    }
+
+    function openAddStudentModal(btn) {
+        const lessonId = btn.getAttribute('data-lesson-id');
+        const lessonName = btn.getAttribute('data-lesson-name');
+        document.getElementById('add-student-lesson-name').innerHTML = `<span class="text-white font-bold">${lessonName}</span> dersine kayıt yapıyorsunuz.`;
+        document.getElementById('add-student-form').action = "/panel/lessons/" + lessonId + "/add_student/";
+        document.getElementById('student_id_select').value = '';
+        toggleNewStudentFields();
+        toggleModal('add-student-modal', true);
+    }
+
+    function toggleNewStudentFields() {
+        const select = document.getElementById('student_id_select');
+        const newFields = document.getElementById('new-student-fields');
+        const newNameInput = document.getElementById('new_student_name');
+        if (select.value === 'new') {
+            newFields.classList.remove('hidden');
+            newNameInput.required = true;
+            newNameInput.focus();
+        } else {
+            newFields.classList.add('hidden');
+            newNameInput.required = false;
+        }
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            toggleModal('add-lesson-modal', false);
+            toggleModal('add-student-modal', false);
+        }
+    });
+</script>
+{% endblock %}

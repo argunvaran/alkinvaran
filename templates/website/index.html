@@ -1,0 +1,777 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section id="hero" class="relative h-screen flex flex-col overflow-hidden w-full">
+    {% if hero.has_image %}
+    <img src="{{ hero.background_image.url }}" alt="{{ hero.title }}"
+        class="absolute inset-0 w-full h-full object-cover opacity-60">
+    {% else %}
+    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&h=1080&auto=format&fit=crop"
+        alt="Banner Placeholder" class="absolute inset-0 w-full h-full object-cover opacity-40">
+    <div class="absolute inset-0 bg-gradient-to-br from-black/80 via-black/50 to-black/80"></div>
+    {% endif %}
+
+    <div class="relative z-10 container mx-auto px-6 text-center h-full flex flex-col justify-between pt-32 pb-48">
+        <!-- Top Half: Title and Subtitle -->
+        <div class="mt-8 md:mt-16">
+            <h1
+                class="text-5xl md:text-8xl font-heading font-black tracking-tight leading-none animate-fade-in drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] mb-6">
+                {% if hero.title %}{{ hero.title|safe }}{% else %}POTANSİYELİNİ <span
+                    class="text-accent underline decoration-4">ŞEKİLLENDİR</span>{% endif %}
+            </h1>
+            <p
+                class="text-xl md:text-2xl text-white max-w-2xl mx-auto font-bold tracking-wide leading-relaxed drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+                {% if hero.subtitle %}{{ hero.subtitle|safe }}{% else %}Sınırlarını zorlayanlar için; fonksiyonel güç,
+                modern hareket dinamikleri ve beden kontrolünü birleştiren elit antrenman programları. Sadece antrenman
+                yapma, daha güçlü, esnek ve yenilmez bir bedene adım at.{% endif %}
+            </p>
+        </div>
+
+        <!-- Bottom Half: Buttons -->
+        <div>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+                <a href="#contact"
+                    class="px-8 py-4 bg-accent hover:bg-accent-dark text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-[0_4px_20px_rgba(59,130,246,0.4)]">
+                    {% if hero.button_text %}{{ hero.button_text }}{% else %}Şimdi Başlayın{% endif %}
+                </a>
+                <a href="#disciplines"
+                    class="px-8 py-4 bg-black/40 hover:bg-black/60 text-white font-bold rounded-full backdrop-blur transition-all border border-white/20">
+                    Daha Fazla Bilgi
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7m14-7l-7 7-7-7">
+            </path>
+        </svg>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-24 bg-secondary">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+            <!-- Image Side -->
+            <div class="lg:w-5/12 relative">
+                <div
+                    class="aspect-[4/5] rounded-3xl overflow-hidden relative z-10 ring-1 ring-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)] group">
+                    <!-- Photo placeholder -->
+                    {% if about and about.has_image %}
+                    <img src="{{ about.portrait_image.url }}" alt="Alkin Varan Portrait"
+                        class="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105 group-hover:grayscale-0">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1549476464-37392f717541?q=80&w=1000&auto=format&fit=crop"
+                        alt="Alkin Varan Portrait"
+                        class="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105 group-hover:grayscale-0">
+                    {% endif %}
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 transition-opacity duration-500 group-hover:opacity-70">
+                    </div>
+
+                    <!-- Title Badge -->
+                    <div
+                        class="absolute bottom-8 left-8 right-8 transform transition-transform duration-500 group-hover:-translate-y-2">
+                        <div
+                            class="inline-flex items-center gap-2 bg-accent/90 backdrop-blur-sm text-white text-xs font-bold px-4 py-2 rounded-full mb-4 uppercase tracking-widest shadow-lg">
+                            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                            2. Kademe Cimnastik Eğitmeni
+                        </div>
+                        <h3 class="text-4xl font-heading font-black text-white leading-none">Alkin Varan</h3>
+                        <p class="text-gray-300 mt-2 font-medium">Head Coach & Movement Specialist</p>
+                    </div>
+                </div>
+
+                <!-- Background decoration dots/lines -->
+                <div
+                    class="absolute -top-6 -left-6 w-full h-full rounded-3xl border-2 border-accent/20 z-0 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 pointer-events-none">
+                </div>
+                <div class="absolute -bottom-10 -right-10 text-accent/10 opacity-50 z-0 pointer-events-none">
+                    <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 100 100">
+                        <pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <circle cx="2" cy="2" r="2"></circle>
+                        </pattern>
+                        <rect x="0" y="0" width="100" height="100" fill="url(#dots)"></rect>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Content Side -->
+            <div class="lg:w-7/12 mt-8 lg:mt-0">
+                <span class="text-accent font-bold uppercase tracking-widest text-sm flex items-center gap-3">
+                    <span class="w-8 h-px bg-accent"></span>
+                    Hakkımda
+                </span>
+                <h2
+                    class="text-4xl md:text-5xl lg:text-5xl font-heading font-black mt-4 mb-8 uppercase leading-tight text-white">
+                    {{ about.title }} <br /><span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">{{ about.highlight_title }}</span>
+                </h2>
+
+                <div class="space-y-6 text-gray-400 text-lg leading-relaxed font-light mb-12">
+                    {{ about.content|linebreaks|safe }}
+                </div>
+
+                <!-- CV Highlights -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 border-t border-white/5 pt-10">
+                    <div>
+                        <div class="text-white text-3xl font-heading font-black mb-2 flex items-baseline gap-1">02<span
+                                class="text-accent text-lg">Lvl</span></div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Cimnastik
+                            <br />Antrenörü
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-white text-3xl font-heading font-black mb-2 flex items-baseline gap-1">10<span
+                                class="text-accent text-lg">+</span></div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Yıllık
+                            <br />Deneyim
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-white text-3xl font-heading font-black mb-2 flex items-baseline gap-1">PRO<span
+                                class="text-accent text-lg">.</span></div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">Hareket
+                            <br />Uzmanlığı
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-white text-3xl font-heading font-black mb-2 flex items-baseline gap-1">100<span
+                                class="text-accent text-lg">%</span></div>
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-widest leading-relaxed">
+                            Potansiyel <br />Açığa Çıkışı</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disciplines Section -->
+<section id="disciplines" class="py-24 bg-primary">
+    <div class="container mx-auto px-6">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div>
+                <span class="text-accent font-bold uppercase tracking-widest text-sm">Disiplinler</span>
+                <h2 class="text-4xl md:text-6xl font-heading font-black mt-2">HAREKETİN <span
+                        class="text-accent">SANATI</span></h2>
+            </div>
+            <p class="text-gray-400 max-w-md text-lg">Hangi dalda uzmanlaşmak isterseniz isteyin, doğru teknik ve
+                tutkuyla yanınızdayız.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {% for discipline in disciplines %}
+            <div class="group relative overflow-hidden rounded-[2rem] bg-secondary cursor-pointer border border-white/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-accent/20 hover:border-accent/40 flex flex-col min-h-[400px]"
+                onclick="openDisciplineModal('{{ discipline.name|escapejs }}', '{{ discipline.description|escapejs }}', '{% if discipline.image %}{{ discipline.image.url }}{% else %}https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=800&auto=format&fit=crop{% endif %}')">
+
+                <!-- Image Side (Top on grid) -->
+                <div class="w-full h-64 sm:h-72 relative overflow-hidden bg-black shrink-0 border-b border-white/5">
+                    {% if discipline.image %}
+                    <img src="{{ discipline.image.url }}" alt="{{ discipline.name }}"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100">
+                    {% else %}
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-accent/20 to-secondary transition-transform duration-700 group-hover:scale-105">
+                        <div
+                            class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay grayscale transition-opacity duration-300 group-hover:opacity-30">
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Content Side (Bottom on grid) -->
+                <div
+                    class="w-full p-8 md:p-10 flex-grow flex flex-col justify-start relative bg-secondary overflow-hidden">
+                    <div
+                        class="absolute -top-12 -right-12 w-64 h-64 bg-accent/5 rounded-full blur-[80px] group-hover:bg-accent/15 transition-colors duration-700 pointer-events-none">
+                    </div>
+
+                    <div class="relative z-10 flex flex-col h-full">
+                        <h3
+                            class="text-3xl md:text-4xl font-heading font-black mb-4 text-white group-hover:text-accent transition-colors duration-500 flex items-center justify-between">
+                            {{ discipline.name }}
+                            <div
+                                class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-accent/50 group-hover:bg-accent/10 transition-all shrink-0 ml-4 group-hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+                                <svg class="w-5 h-5 text-white group-hover:text-accent transform transition-transform group-hover:translate-x-1"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </div>
+                        </h3>
+                        <p
+                            class="text-gray-300 text-base md:text-lg leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-500 border-l-2 border-accent/30 group-hover:border-accent pl-5 py-1">
+                            {{ discipline.description }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div
+                class="text-center py-12 text-gray-500 italic bg-white/5 rounded-3xl border border-dashed border-white/10 col-span-full">
+                Disiplinler yakında ekleniyor...
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Level Assessment Quiz Section -->
+<section id="levels" class="py-24 bg-primary relative overflow-hidden">
+    <!-- Background element -->
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px] pointer-events-none">
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="text-center mb-16">
+            <span
+                class="text-accent font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3">
+                <span class="w-8 h-px bg-accent"></span> Eğitim <span class="w-8 h-px bg-accent"></span>
+            </span>
+            <h2 class="text-4xl md:text-6xl font-heading font-black mt-4">SEVİYENİ <span
+                    class="text-accent">BELİRLE</span></h2>
+            <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-lg leading-relaxed">
+                Sana en uygun eğitim programını hazırlamamız için aşağıdaki 3 kısa soruyu yanıtla, seviyeni bulalım ve
+                seninle iletişime geçelim.
+            </p>
+        </div>
+
+        <div
+            class="max-w-4xl mx-auto bg-secondary p-8 md:p-12 rounded-[2rem] border border-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.4)] relative">
+
+            <!-- Progress Bar -->
+            <div id="quiz-progress"
+                class="w-full bg-primary h-2 rounded-full mb-10 overflow-hidden ring-1 ring-white/10">
+                <div id="quiz-progress-bar"
+                    class="bg-gradient-to-r from-accent to-accent-dark h-full w-0 transition-all duration-700 ease-out rounded-full">
+                </div>
+            </div>
+
+            <!-- Quiz Screens Container -->
+            <div id="quiz-screens" class="relative min-h-[300px]">
+
+                <!-- Q1 -->
+                <div id="q1" class="quiz-screen block transform transition-all duration-500">
+                    <div class="text-accent font-bold mb-2">Soru 1 / 3</div>
+                    <h3 class="text-2xl md:text-3xl font-heading font-black text-white mb-8">Şu anki spor ve antrenman
+                        geçmişin nasıl?</h3>
+                    <div class="space-y-4">
+                        <button onclick="answerQuiz(1, 1)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">A</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Spor
+                                geçmişim yok, yepyeni bir başlangıç yapmak istiyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(1, 2)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">B</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Belli bir
+                                altyapım var, arada bir antrenman yapıyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(1, 4)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">C</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Düzenli
+                                çalışıyorum, kontrol algım ve fitness kapasitem yüksek.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div id="q2" class="quiz-screen hidden transform transition-all duration-500">
+                    <div class="text-accent font-bold mb-2">Soru 2 / 3</div>
+                    <h3 class="text-2xl md:text-3xl font-heading font-black text-white mb-8">Handstand veya tumbling
+                        (takla/akrobasi) gibi formlara aşinalığın nedir?</h3>
+                    <div class="space-y-4">
+                        <button onclick="answerQuiz(2, 1)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">A</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Kesinlikle
+                                hiç denemedim, nereden başlayacağımı bilmiyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(2, 2)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">B</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Amuda
+                                kalkmayı vs. biraz denedim ama denge sağlayamıyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(2, 4)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">C</span>
+                            <span
+                                class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Temellerine
+                                fazlasıyla hakimim, rahat uygulayabiliyorum.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div id="q3" class="quiz-screen hidden transform transition-all duration-500">
+                    <div class="text-accent font-bold mb-2">Soru 3 / 3</div>
+                    <h3 class="text-2xl md:text-3xl font-heading font-black text-white mb-8">Bedenini değerlendirmek
+                        istersen en büyük eksikliğin ne tarafta?</h3>
+                    <div class="space-y-4">
+                        <button onclick="answerQuiz(3, 1)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">A</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Esneklik
+                                sıfır, stabilite ve çekirdek gücüm yetersiz. Çabuk yoruluyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(3, 2)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">B</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Gücüm
+                                yerinde ama dinamik kontrol ve hareket geçişlerinde zorlanıyorum.</span>
+                        </button>
+                        <button onclick="answerQuiz(3, 4)"
+                            class="w-full text-left p-6 md:p-8 rounded-2xl bg-primary border border-white/5 hover:border-accent hover:bg-accent/10 transition-all group flex items-center gap-4">
+                            <span
+                                class="w-10 h-10 rounded-full bg-secondary border border-white/10 flex items-center justify-center text-gray-400 group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-colors font-bold">C</span>
+                            <span class="text-lg md:text-xl text-gray-300 group-hover:text-white font-medium">Her şey
+                                ideal sayılır. Amacım artık sınırları kırıp mükemmeliyet!</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Result Screen -->
+                <div id="q-result" class="quiz-screen hidden text-center transform transition-all duration-500">
+                    <div
+                        class="w-24 h-24 mx-auto bg-green-500/20 rounded-full flex items-center justify-center mb-6 animate-fade-in shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-400 uppercase tracking-widest text-sm font-bold mb-2">Mükemmel Uyum</p>
+                    <h3 class="text-3xl md:text-4xl font-heading font-black mb-4 text-white">Senin Seviyen: <br
+                            class="block md:hidden" /><span id="final-level-text"
+                            class="text-accent text-5xl md:text-6xl border-b-4 border-accent inline-block mt-2">Başlangıç</span>
+                    </h3>
+                    <p id="final-level-desc" class="text-gray-400 mb-10 max-w-xl mx-auto text-lg leading-relaxed"></p>
+
+                    <div
+                        class="bg-primary p-8 rounded-2xl border border-white/5 max-w-lg mx-auto shadow-inner text-left">
+                        <p class="text-white font-bold mb-6 text-center text-xl">Detaylar için İletişime Geçelim</p>
+                        <form method="POST" action="#contact" class="space-y-4">
+                            {% csrf_token %}
+                            <input type="hidden" id="quiz-subject" name="subject" value="">
+                            <input type="hidden" id="quiz-message" name="message" value="">
+
+                            <div>
+                                <input type="text" name="full_name" required placeholder="Adınız Soyadınız"
+                                    class="w-full bg-secondary border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-accent transition-all text-white font-medium placeholder-gray-500">
+                            </div>
+                            <div>
+                                <input type="email" name="email" required placeholder="E-posta Adresiniz"
+                                    class="w-full bg-secondary border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-accent transition-all text-white font-medium placeholder-gray-500">
+                            </div>
+                            <div>
+                                <input type="tel" name="phone" required placeholder="Cep Telefonu Numaranız"
+                                    pattern="[0-9\-\+\s\(\)]*" title="Geçerli bir telefon numarası giriniz."
+                                    class="w-full bg-secondary border border-white/10 rounded-xl px-5 py-4 focus:outline-none focus:border-accent transition-all text-white font-medium placeholder-gray-500">
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-accent hover:bg-accent-dark text-white font-black py-4 rounded-xl transition-all uppercase tracking-widest text-sm transform hover:scale-[1.02] shadow-lg shadow-accent/20">
+                                Sonucumu Kendisine Gönder
+                                <svg class="w-5 h-5 inline-block ml-2 mb-1" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Studio Section -->
+<section id="studios" class="py-24 bg-primary relative overflow-hidden">
+    <!-- Ambient Glow -->
+    <div
+        class="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-accent/20 rounded-full blur-[120px] pointer-events-none">
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row items-center justify-between mb-16">
+            <div>
+                <span class="text-accent font-bold uppercase tracking-widest text-sm">Hareketin Merkezi</span>
+                <h2 class="text-4xl md:text-6xl font-heading font-black mt-2">STÜDYO</h2>
+            </div>
+        </div>
+
+        <div
+            class="bg-secondary rounded-[2rem] border border-white/5 overflow-hidden flex flex-col lg:flex-row group shadow-2xl relative">
+
+            <!-- Image Side -->
+            <div class="lg:w-1/2 relative min-h-[400px] lg:min-h-[600px] overflow-hidden bg-black">
+                {% if studios.0 and studios.0.has_image %}
+                <img src="{{ studios.0.image.url }}" alt="{{ studios.0.name }}"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100 mix-blend-luminosity hover:mix-blend-normal">
+                {% else %}
+                <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop"
+                    alt="Point Athletics Studio"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100 mix-blend-luminosity hover:mix-blend-normal">
+                {% endif %}
+                <div
+                    class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-secondary/50 lg:to-secondary">
+                </div>
+
+                <!-- Badge -->
+                <div
+                    class="absolute bottom-8 left-8 lg:bottom-12 lg:left-12 bg-black/60 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full flex items-center gap-3">
+                    <div class="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.8)]">
+                    </div>
+                    <span class="text-white font-bold tracking-wide text-sm">Elite Training Ground</span>
+                </div>
+            </div>
+
+            <!-- Content Side -->
+            <div class="lg:w-1/2 p-10 md:p-16 flex flex-col justify-center relative bg-secondary">
+                <!-- Watermark -->
+                <h3
+                    class="text-[6rem] md:text-[8rem] font-heading font-black text-white/5 absolute -top-4 -right-4 pointer-events-none select-none tracking-tighter">
+                    POINT</h3>
+
+                <h3 class="text-4xl md:text-5xl font-heading font-black mb-3 relative z-10">Point Athletics</h3>
+                <p
+                    class="text-accent text-sm md:text-base font-bold mb-8 uppercase tracking-widest relative z-10 opacity-80">
+                    İstanbul</p>
+
+                <p class="text-gray-300 text-lg leading-relaxed mb-10 relative z-10 border-l-2 border-accent/50 pl-6">
+                    Yetişkinler ve çocuklar için handstand'den jimnastiğe kadar uzanan elit grup dersleri.
+                    Yapılandırılmış güç ve kondisyon protokolleriyle, inkar edilemez bir gelişim için tasarlandı.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 mb-12 relative z-10">
+                    <div class="flex items-start gap-4 group/feature">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-primary border border-white/5 flex items-center justify-center shrink-0 mt-1 transition-colors group-hover/feature:border-accent/40 group-hover/feature:bg-accent/10">
+                            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-1">Cimnastik Temelleri</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed">Oyun ve teknik çalışma dengesiyle motor
+                                becerileri.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 relative z-10 mt-auto">
+                    <a href="https://www.instagram.com/pointathletics/" target="_blank"
+                        class="px-8 py-4 bg-accent hover:bg-accent-dark text-white font-bold rounded-full transition-all inline-flex items-center gap-3 shadow-lg shadow-accent/20 hover:shadow-accent/40 transform hover:-translate-y-1">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                        </svg>
+                        Instagram
+                    </a>
+
+                    <a href="#contact"
+                        class="px-8 py-4 bg-primary hover:bg-white/5 text-white font-bold rounded-full transition-all border border-white/5 hover:border-white/20 inline-flex items-center">
+                        Derslere Katıl
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-24 bg-black relative">
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <span class="text-accent font-bold uppercase tracking-widest text-sm">İletişim</span>
+                <h2 class="text-4xl md:text-6xl font-heading font-black mt-2 mb-8">BİRLİKTE <span
+                        class="text-accent">GÜÇLENELİM</span></h2>
+                <p class="text-gray-400 text-lg mb-12 max-w-md">Kişiselleştirilmiş eğitim programları, stüdyo dersleri
+                    veya projeler için benimle iletişime geçin.</p>
+
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div
+                            class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-accent shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Instagram</p>
+                            <a href="https://www.instagram.com/alkinvaran" target="_blank"
+                                class="font-bold hover:text-accent transition-colors block text-white">
+                                @alkinvaran
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div
+                            class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-accent shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Email</p>
+                            <a href="mailto:alkinvaran@gmail.com"
+                                class="font-bold hover:text-accent transition-colors block text-white">
+                                alkinvaran@gmail.com
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-accent">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-1">Konum</p>
+                            <a href="https://www.google.com/maps/search/Point+Athletics+İstanbul+Ümraniye+Hicret"
+                                target="_blank"
+                                class="font-bold text-sm leading-snug hover:text-accent transition-colors block">
+                                <span class="text-white">Point Athletics</span><br />
+                                <span class="text-gray-400 font-normal">İstanbul, Ümraniye, Mehmet Akif Mah., Hicret
+                                    Sok., 12</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-secondary p-8 md:p-12 rounded-[2rem] border border-white/5 shadow-2xl">
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-400">Ad
+                            Soyad</label>
+                        <input type="text" name="full_name" required
+                            class="w-full bg-primary border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-accent transition-all">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-400">E-posta</label>
+                        <input type="email" name="email" required
+                            class="w-full bg-primary border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-accent transition-all">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-400">Telefon</label>
+                        <input type="tel" name="phone" pattern="[0-9\-\+\s\(\)]*"
+                            title="Geçerli bir telefon numarası giriniz." required
+                            class="w-full bg-primary border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-accent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-400">Konu</label>
+                        <input type="text" name="subject" required
+                            class="w-full bg-primary border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-accent transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 uppercase tracking-wide text-gray-400">Mesaj</label>
+                        <textarea name="message" required rows="4"
+                            class="w-full bg-primary border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-accent transition-all"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-accent hover:bg-accent-dark text-white font-black py-5 rounded-xl transition-all uppercase tracking-widest text-sm transform hover:scale-[1.02]">
+                        Gönder
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Discipline Modal -->
+<div id="discipline-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/90 backdrop-blur-md modal-backdrop transition-opacity duration-300 opacity-0"
+        onclick="closeDisciplineModal()"></div>
+
+    <!-- Modal Content -->
+    <div
+        class="relative bg-secondary border border-white/10 rounded-[2rem] max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0 modal-content shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <button onclick="closeDisciplineModal()"
+            class="absolute top-4 right-4 sm:top-6 sm:right-6 w-12 h-12 bg-black/50 hover:bg-accent rounded-full flex items-center justify-center text-white transition-all z-10 backdrop-blur-sm border border-white/10 hover:scale-110">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <div class="w-full h-56 sm:h-72 lg:h-80 bg-primary relative">
+            <img id="modal-image" src="" alt="" class="w-full h-full object-cover opacity-60">
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-secondary/80 to-transparent"></div>
+        </div>
+
+        <div class="p-8 sm:p-12 relative -mt-16 sm:-mt-20">
+            <h3 id="modal-title" class="text-3xl sm:text-5xl font-heading font-black mb-4"></h3>
+            <div class="w-16 h-1 bg-accent mb-6 rounded-full"></div>
+            <p id="modal-description" class="text-gray-300 text-lg sm:text-xl leading-relaxed mb-10 font-light"></p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#contact" onclick="closeDisciplineModal()"
+                    class="inline-flex items-center justify-center px-8 py-4 bg-accent hover:bg-accent-dark text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-lg shadow-accent/20">
+                    Eğitim Al
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </a>
+                <button onclick="closeDisciplineModal()"
+                    class="inline-flex items-center justify-center px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full transition-all border border-white/10">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Modal Logic
+    function openDisciplineModal(title, description, imageUrl) {
+        const modal = document.getElementById('discipline-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalImage = document.getElementById('modal-image');
+        const backdrop = modal.querySelector('.modal-backdrop');
+        const content = modal.querySelector('.modal-content');
+
+        // Populate content
+        modalTitle.textContent = title;
+        modalDescription.textContent = description || "Detaylar çok yakında eklenecektir.";
+        modalImage.src = imageUrl;
+
+        // Show modal container
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Trigger animations
+        setTimeout(() => {
+            backdrop.classList.remove('opacity-0');
+            backdrop.classList.add('opacity-100');
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+
+        // Prevent body scroll
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDisciplineModal() {
+        const modal = document.getElementById('discipline-modal');
+        const backdrop = modal.querySelector('.modal-backdrop');
+        const content = modal.querySelector('.modal-content');
+
+        // Reverse animations
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+
+        // Hide after animation finishes
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    // Interactive Quiz Logic
+    let quizScore = 0;
+
+    function answerQuiz(currentStep, score) {
+        quizScore += score;
+
+        const currentContainer = document.getElementById('q' + currentStep);
+        currentContainer.classList.remove('block');
+        currentContainer.classList.add('hidden');
+
+        const progress = (currentStep / 3) * 100;
+        document.getElementById('quiz-progress-bar').style.width = progress + '%';
+
+        const nextStep = currentStep + 1;
+        if (nextStep <= 3) {
+            const nextContainer = document.getElementById('q' + nextStep);
+            nextContainer.classList.remove('hidden');
+            nextContainer.classList.add('block');
+        } else {
+            showQuizResult();
+        }
+    }
+
+    function showQuizResult() {
+        const resultSection = document.getElementById('q-result');
+        const levelText = document.getElementById('final-level-text');
+        const levelDescEl = document.getElementById('final-level-desc');
+        const subjectInput = document.getElementById('quiz-subject');
+        const messageInput = document.getElementById('quiz-message');
+
+        resultSection.classList.remove('hidden');
+        resultSection.classList.add('block');
+
+        const progressBar = document.getElementById('quiz-progress-bar');
+        progressBar.style.width = '100%';
+        progressBar.classList.remove('from-accent', 'to-accent-dark');
+        progressBar.classList.add('from-green-400', 'to-green-600');
+
+        let levelName = "";
+        let levelDesc = "";
+
+        // Score between 3 and 12
+        if (quizScore <= 5) {
+            levelName = "Temel Seviye";
+            levelDesc = "Hareket dünyasına sağlam bir giriş yapmanız gerekiyor. Stabilite, mobilite ve core gücü eğitimleriyle temelleri korkusuzca atacağız.";
+        } else if (quizScore <= 9) {
+            levelName = "Orta Seviye";
+            levelDesc = "Güzel bir altyapınız var. Amacımız artık dinamik kontroller, handstand denge sistemleri ve formları bir üst boyuta taşımak.";
+        } else {
+            levelName = "İleri Seviye";
+            levelDesc = "Kondisyon ve farkındalığınız tepe noktada. Sınırları aşmak ve mükemmel teknik ile akrobatik formları inşa etmek için harika bir noktasınız.";
+        }
+
+        levelText.innerText = levelName;
+        levelDescEl.innerText = levelDesc;
+
+        subjectInput.value = "Yeni Danışan Analizi: " + levelName;
+        messageInput.value = "Kişisel değerlendirme quiz'ini tamamladım.\n\n[Analiz Verileri]\nPuanım: " + quizScore + "\nHesaplanan Benim Seviyem: " + levelName + "\n\nDurumuma en uygun eğitim programını oluşturmanız için cevap yazmanızı bekliyorum.";
+    }
+
+    // Auto-hide Tost Notifications after 5 seconds
+    document.addEventListener("DOMContentLoaded", function () {
+        const toasts = document.querySelectorAll('.toast-item');
+        toasts.forEach(toast => {
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-[120%]');
+                setTimeout(() => toast.remove(), 500);
+            }, 6000);
+        });
+    });
+</script>
+{% endblock %}

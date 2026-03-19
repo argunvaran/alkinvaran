@@ -1,0 +1,54 @@
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1a1a1a;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+}
+
+/* Swiper Tweaks */
+.studio-swiper {
+    padding-bottom: 50px !important;
+}
+
+.swiper-pagination-bullet {
+    background: #3b82f6 !important;
+    opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    width: 24px !important;
+    border-radius: 4px !important;
+}
+
+/* Navigation Blur Fix */
+nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Section Transitions */
+section {
+    position: relative;
+    z-index: 1;
+}

@@ -1,0 +1,149 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}Gelen Kutusu{% endblock %}
+
+{% block content %}
+<div class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+        <h2 class="text-3xl font-heading font-black tracking-tight text-white uppercase"><span
+                class="text-accent">GELEN KUTUSU</span></h2>
+        <p class="text-gray-400 mt-2 font-medium">Bütün iletişim form mesajları bu alandan takip edilebilir</p>
+    </div>
+</div>
+
+<!-- Dashboard Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="bg-secondary border border-white/5 rounded-2xl p-6 shadow-xl flex items-center gap-6">
+        <div class="w-14 h-14 rounded-full bg-accent/20 flex items-center justify-center text-accent shrink-0">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+        <div>
+            <h4 class="text-gray-400 text-sm font-bold uppercase tracking-widest mb-1">Toplam Talep</h4>
+            <span class="text-3xl font-heading font-black text-white">{{ total_messages }}</span>
+        </div>
+    </div>
+    <div class="bg-secondary border border-white/5 rounded-2xl p-6 shadow-xl flex items-center gap-6">
+        <div
+            class="w-14 h-14 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 shrink-0">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <div>
+            <h4 class="text-gray-400 text-sm font-bold uppercase tracking-widest mb-1">Bekleyenler</h4>
+            <span class="text-3xl font-heading font-black text-white">{{ pending_messages }}</span>
+        </div>
+    </div>
+    <div class="bg-secondary border border-white/5 rounded-2xl p-6 shadow-xl flex items-center gap-6">
+        <div
+            class="w-14 h-14 rounded-full bg-green-500/20 flex items-center justify-center text-green-500 shrink-0">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        <div>
+            <h4 class="text-gray-400 text-sm font-bold uppercase tracking-widest mb-1">Dönüş Yapılan</h4>
+            <span class="text-3xl font-heading font-black text-white">{{ replied_messages }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters Section -->
+<div class="mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+    <form method="GET" action="{% url 'crm_inbox' %}" class="w-full md:w-1/2 relative group">
+        <input type="hidden" name="status" value="{{ status }}">
+        <input type="text" name="q" value="{{ q }}" placeholder="İsim, e-posta veya konu ara..."
+            class="w-full bg-secondary border border-white/10 rounded-xl px-6 py-4 pl-14 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all placeholder-gray-500">
+        <svg class="w-6 h-6 text-gray-400 absolute left-5 top-1/2 -translate-y-1/2 group-focus-within:text-accent transition-colors"
+            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </form>
+
+    <form method="GET" action="{% url 'crm_inbox' %}" class="w-full md:w-auto" id="filter-form">
+        <input type="hidden" name="q" value="{{ q }}">
+        <div class="relative">
+            <select name="status" onchange="document.getElementById('filter-form').submit()"
+                class="w-full md:w-48 appearance-none bg-secondary border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-accent transition-all cursor-pointer">
+                <option value="all" {% if status == 'all' %}selected{% endif %}>Tümü</option>
+                <option value="pending" {% if status == 'pending' %}selected{% endif %}>Bekleyenler</option>
+                <option value="replied" {% if status == 'replied' %}selected{% endif %}>Dönüş Yapılanlar</option>
+            </select>
+            <svg class="w-5 h-5 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
+                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </form>
+</div>
+
+<!-- Messages List -->
+<div id="messages-container" class="space-y-6">
+    {% if total_messages == 0 and not q and status == 'all' %}
+    <div class="bg-secondary border border-white/5 rounded-[2rem] p-16 text-center">
+        <div class="w-24 h-24 mx-auto bg-white/5 rounded-full flex items-center justify-center mb-6 text-gray-500">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                </path>
+            </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-2">Gelen Kutusu Boş</h3>
+        <p class="text-gray-400">Henüz yeni bir mesaj almadınız.</p>
+    </div>
+    {% elif messages|length == 0 %}
+    <div class="bg-secondary border border-white/5 rounded-[2rem] p-16 text-center">
+        <h3 class="text-xl font-bold text-white mb-2">Sonuç Bulunamadı</h3>
+        <p class="text-gray-400">Arama kriterlerinize uyan mesaj bulunamadı.</p>
+    </div>
+    {% else %}
+    {% include 'crm/partials/_messages_list.html' %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const messagesContainer = document.getElementById('messages-container');
+
+        messagesContainer.addEventListener('click', function (e) {
+            const btn = e.target.closest('.load-more-btn');
+            if (btn) {
+                e.preventDefault();
+                const url = btn.getAttribute('data-url');
+                const btnOriginalText = btn.innerHTML;
+
+                // Show loading state
+                btn.innerHTML = `<svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Yükleniyor...`;
+                btn.disabled = true;
+
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        // Remove the current load more container
+                        const currentContainer = document.getElementById('load-more-container');
+                        if (currentContainer) currentContainer.remove();
+
+                        // Append new html
+                        messagesContainer.insertAdjacentHTML('beforeend', html);
+                    })
+                    .catch(err => {
+                        console.error('Error loading more messages:', err);
+                        btn.innerHTML = btnOriginalText;
+                        btn.disabled = false;
+                    });
+            }
+        });
+    });
+</script>
+{% endblock %}

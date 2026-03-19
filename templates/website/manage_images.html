@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alkin Varan | Görsel Yönetimi{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-primary pt-32 pb-24 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[150px] pointer-events-none">
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row items-center justify-between mb-16 gap-6">
+            <div>
+                <span class="text-accent font-bold uppercase tracking-widest text-sm flex items-center gap-3">
+                    <span class="w-8 h-px bg-accent"></span> Sadece Yönetici
+                </span>
+                <h1 class="text-4xl md:text-5xl font-heading font-black mt-2 text-white uppercase tracking-tight">GÖRSEL
+                    YÖNETİMİ</h1>
+            </div>
+
+            <div class="flex flex-wrap gap-4">
+                <a href="{% url 'crm_dashboard' %}"
+                    class="px-6 py-3 bg-secondary hover:bg-white/10 border border-white/10 text-white rounded-xl transition-all font-bold flex items-center gap-2 group">
+                    <svg class="w-5 h-5 text-accent group-hover:scale-110 transition-transform" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                        </path>
+                    </svg>
+                    Panele Dön
+                </a>
+                <a href="/"
+                    class="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl transition-all font-bold flex items-center gap-2">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Siteye Dön
+                </a>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div
+                class="bg-secondary border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl group transition-all hover:border-accent/20">
+                <div class="flex items-center gap-4 mb-6">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/20 text-accent flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">Ana Sayfa (Hero)</h3>
+                        <p class="text-gray-400 text-sm italic">Önerilen: 1920x1080 px</p>
+                    </div>
+                </div>
+
+                <div
+                    class="aspect-video w-full rounded-2xl overflow-hidden mb-6 bg-primary ring-1 ring-white/10 shadow-inner">
+                    {% if hero.background_image %}
+                    <img src="{{ hero.background_image.url }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    {% else %}
+                    <div class="w-full h-full flex flex-col items-center justify-center text-gray-600 italic">
+                        <svg class="w-12 h-12 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14">
+                            </path>
+                        </svg>
+                        <span>Görsel Yüklü Değil</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="hero">
+                    <div class="space-y-3">
+                        <div>
+                            <label
+                                class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">Başlık</label>
+                            <input type="text" name="title" value="{{ hero.title }}" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent transition-colors">
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">Alt
+                                Başlık</label>
+                            <textarea name="subtitle" rows="2" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-300 text-xs focus:outline-none focus:border-accent resize-none">{{ hero.subtitle }}</textarea>
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">Buton
+                                Metni</label>
+                            <input type="text" name="button_text" value="{{ hero.button_text }}" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mt-2">
+                        <div class="flex-1 relative group/input">
+                            <input type="file" name="hero_image" accept="image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div
+                                class="px-4 py-3 bg-primary border border-white/10 rounded-xl text-gray-400 font-medium truncate flex items-center gap-2 justify-center file-name-display w-full h-full transition-all group-hover/input:border-accent/40">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                </svg>
+                                <span>Görseli Değiştir</span>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="px-8 py-3 bg-accent hover:bg-accent-dark text-white rounded-xl font-bold transition-all shadow-lg active:scale-95">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+
+            <div
+                class="bg-secondary border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl group transition-all hover:border-orange-500/20">
+                <div class="flex items-center gap-4 mb-6">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">Profil Fotoğrafı</h3>
+                        <p class="text-gray-400 text-sm italic">Önerilen: 800x1000 px</p>
+                    </div>
+                </div>
+
+                <div
+                    class="aspect-[4/5] w-48 rounded-2xl overflow-hidden mb-6 bg-primary ring-1 ring-white/10 mx-auto shadow-2xl relative">
+                    {% if about.portrait_image %}
+                    <img src="{{ about.portrait_image.url }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    {% else %}
+                    <div
+                        class="w-full h-full flex flex-col items-center justify-center text-gray-600 text-center p-4 italic">
+                        <svg class="w-10 h-10 mb-2 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span>Görsel Yok</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="flex flex-col gap-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="about">
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label
+                                    class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">Ana
+                                    Başlık</label>
+                                <input type="text" name="title" value="{{ about.title }}" required
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-orange-500">
+                            </div>
+                            <div>
+                                <label
+                                    class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">Vurgu</label>
+                                <input type="text" name="highlight_title" value="{{ about.highlight_title }}" required
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-orange-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="text-[10px] text-gray-500 font-bold uppercase tracking-widest pl-1 block mb-1">İçerik</label>
+                            <textarea name="content" rows="4" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-gray-300 text-xs focus:outline-none focus:border-orange-500 resize-none leading-relaxed">{{ about.content }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 mt-2">
+                        <div class="flex-1 relative group/input">
+                            <input type="file" name="about_image" accept="image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateFileName(this)">
+                            <div
+                                class="px-4 py-3 bg-primary border border-white/10 rounded-xl text-gray-400 font-medium truncate flex items-center gap-2 justify-center file-name-display w-full h-full transition-all group-hover/input:border-orange-500/40">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                </svg>
+                                <span>Görseli Değiştir</span>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold transition-all shadow-lg active:scale-95">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-secondary border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+            <div class="mb-8 text-center sm:text-left">
+                <h3
+                    class="text-3xl font-heading font-black text-white flex items-center justify-center sm:justify-start gap-3">
+                    <span class="w-2 h-8 bg-accent rounded-full"></span> Disiplinler / Kategoriler
+                </h3>
+                <p class="text-gray-400 mt-2 italic">Kart görselleri Önerilen: 600x800 px</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {% for disc in disciplines %}
+                <div
+                    class="bg-primary rounded-3xl border border-white/10 p-5 group hover:border-accent/40 transition-all flex flex-col relative">
+                    <form method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 gap-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="discipline">
+                        <input type="hidden" name="discipline_id" value="{{ disc.id }}">
+
+                        <div
+                            class="aspect-[3/4] rounded-2xl overflow-hidden bg-black relative shrink-0 group/img ring-1 ring-white/5">
+                            {% if disc.image %}
+                            <img src="{{ disc.image.url }}" class="w-full h-full object-cover">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs">Görsel Yok
+                            </div>
+                            {% endif %}
+                            <input type="file" name="discipline_image" accept="image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateDiscFile(this, 'file_name_{{ disc.id }}')">
+                            <div
+                                class="absolute inset-0 bg-accent/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                <span
+                                    class="bg-white text-accent px-4 py-2 rounded-xl text-xs font-bold shadow-xl uppercase">Değiştir</span>
+                            </div>
+                        </div>
+
+                        <div id="file_name_{{ disc.id }}"
+                            class="text-[11px] text-center text-accent font-bold hidden truncate bg-accent/10 py-1.5 rounded-lg border border-accent/20">
+                        </div>
+
+                        <div class="flex flex-col gap-3 flex-1">
+                            <input type="text" name="name" value="{{ disc.name }}" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm font-bold focus:outline-none focus:border-accent">
+                            <textarea name="description" rows="2"
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-300 text-xs focus:outline-none focus:border-accent resize-none">{{ disc.description }}</textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-white/10 hover:bg-accent text-white border border-white/10 rounded-xl text-[11px] font-bold transition-all uppercase tracking-widest">
+                            Değişiklikleri Kaydet
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mt-12 bg-secondary border border-white/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl">
+            <div class="mb-8">
+                <h3 class="text-3xl font-heading font-black text-white flex items-center gap-3">
+                    <span class="w-2 h-8 bg-orange-500 rounded-full"></span> Stüdyolar
+                </h3>
+                <p class="text-gray-400 mt-2 small">Geniş arka plan görselleri Önerilen: 1200x800 px</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for studio in studios %}
+                <div
+                    class="bg-primary rounded-3xl border border-white/10 p-5 group hover:border-orange-500/40 transition-all flex flex-col relative">
+                    <form method="POST" enctype="multipart/form-data" class="flex flex-col flex-1 gap-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="studio">
+                        <input type="hidden" name="studio_id" value="{{ studio.id }}">
+
+                        <div
+                            class="aspect-[3/2] rounded-2xl overflow-hidden bg-black relative shrink-0 group/img ring-1 ring-white/5">
+                            {% if studio.image %}
+                            <img src="{{ studio.image.url }}" class="w-full h-full object-cover">
+                            {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-700 text-xs">Görsel Yok
+                            </div>
+                            {% endif %}
+                            <input type="file" name="studio_image" accept="image/*"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                onchange="updateDiscFile(this, 'studio_file_name_{{ studio.id }}')">
+                            <div
+                                class="absolute inset-0 bg-orange-500/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                <span
+                                    class="bg-white text-orange-500 px-4 py-2 rounded-xl text-xs font-bold shadow-xl uppercase">Değiştir</span>
+                            </div>
+                        </div>
+
+                        <div id="studio_file_name_{{ studio.id }}"
+                            class="text-[11px] text-center text-orange-400 font-bold hidden truncate bg-orange-500/10 py-1.5 rounded-lg border border-orange-500/20">
+                        </div>
+
+                        <div class="space-y-3 flex-1">
+                            <input type="text" name="name" value="{{ studio.name }}" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm font-bold focus:outline-none focus:border-orange-500">
+                            <input type="text" name="location" value="{{ studio.location }}" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-orange-500">
+                            <textarea name="description" rows="2"
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-gray-300 text-xs focus:outline-none focus:border-orange-500 resize-none">{{ studio.description }}</textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-white/10 hover:bg-orange-500 text-white border border-white/10 rounded-xl text-[11px] font-bold transition-all uppercase tracking-widest">
+                            Değişiklikleri Kaydet
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function updateFileName(input) {
+        const displayDiv = input.nextElementSibling;
+        if (input.files && input.files.length > 0) {
+            const fileName = input.files[0].name;
+            const shortName = fileName.length > 20 ? fileName.substring(0, 17) + '...' : fileName;
+            displayDiv.innerHTML = `
+                <svg class="w-5 h-5 shrink-0 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg> 
+                <span class="text-white font-bold">${shortName}</span>
+            `;
+            displayDiv.classList.add('border-green-500/50', 'bg-green-500/5');
+        }
+    }
+
+    function updateDiscFile(input, displayId) {
+        const displayDiv = document.getElementById(displayId);
+        if (input.files && input.files.length > 0) {
+            displayDiv.classList.remove('hidden');
+            const fileName = input.files[0].name;
+            const shortName = fileName.length > 20 ? fileName.substring(0, 17) + '...' : fileName;
+            displayDiv.innerHTML = `Seçildi: ${shortName}`;
+        } else {
+            displayDiv.classList.add('hidden');
+        }
+    }
+</script>
+{% endblock %}

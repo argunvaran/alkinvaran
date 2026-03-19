@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+venv/
+env/
+.env
+
+# Database (PostgreSQL will be used in Prod, but SQLite might be kept locally if needed)
+db.sqlite3
+
+# Media and Static
+media/
+staticfiles/
+
+# System Files
+.DS_Store
+Thumbs.db

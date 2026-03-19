@@ -1,0 +1,141 @@
+{% extends 'crm/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-10">
+    <h2 class="text-3xl font-heading font-black tracking-tight text-white uppercase"><span
+            class="text-accent">DASHBOARD</span></h2>
+    <p class="text-gray-400 mt-2 font-medium">Genel İstatistikler ve Yönetim Özeti</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+    <!-- Stat 1 -->
+    <div class="bg-secondary rounded-[2rem] p-8 border border-white/5 relative overflow-hidden group">
+        <div
+            class="absolute -right-10 -bottom-10 w-32 h-32 bg-accent/10 rounded-full blur-[40px] group-hover:bg-accent/20 transition-colors">
+        </div>
+        <div
+            class="relative z-10 w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center text-accent mb-6 border border-accent/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                </path>
+            </svg>
+        </div>
+        <h3 class="text-4xl font-heading font-black text-white mb-2">{{ active_students }} <span
+                class="text-xl text-gray-500 font-medium">/ {{ total_students }}</span></h3>
+        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Aktif Öğrenciler</p>
+    </div>
+
+    <!-- Stat 2 -->
+    <div class="bg-secondary rounded-[2rem] p-8 border border-white/5 relative overflow-hidden group">
+        <div
+            class="absolute -right-10 -bottom-10 w-32 h-32 bg-purple-500/10 rounded-full blur-[40px] group-hover:bg-purple-500/20 transition-colors">
+        </div>
+        <div
+            class="relative z-10 w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-purple-400 mb-6 border border-purple-500/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-4xl font-heading font-black text-white mb-2">{{ total_lessons }}</h3>
+        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Ders (Seans)</p>
+    </div>
+
+    <!-- Stat 3 (Revenue expanded to span 2 cols to fit grid nicely) -->
+    <div class="bg-secondary rounded-[2rem] p-8 border border-white/5 relative overflow-hidden group md:col-span-2">
+        <div
+            class="absolute -right-10 -bottom-10 w-32 h-32 bg-green-500/10 rounded-full blur-[40px] group-hover:bg-green-500/20 transition-colors">
+        </div>
+        <div
+            class="relative z-10 w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center text-green-400 mb-6 border border-green-500/20">
+            <span class="text-2xl font-black">₺</span>
+        </div>
+        <h3 class="text-4xl font-heading font-black text-white mb-2">{{ total_revenue }}<span
+                class="text-accent"></span></h3>
+        <p class="text-sm font-bold text-gray-400 uppercase tracking-widest">Toplam Ciro (Kayıtlı)</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recent Messages / Leads -->
+    <div class="bg-secondary rounded-[2rem] border border-white/5 p-8 flex flex-col h-full">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-bold font-heading uppercase text-white tracking-wide">Bekleyen Mesajlar</h3>
+            <a href="{% url 'crm_inbox' %}"
+                class="text-accent text-sm font-bold uppercase tracking-widest hover:text-white transition-colors">Tümü</a>
+        </div>
+
+        <div class="flex-1" id="dash-messages-container">
+            {% include 'crm/partials/_dash_messages.html' %}
+        </div>
+    </div>
+    <!-- Recent Payments -->
+    <div class="bg-secondary rounded-[2rem] border border-white/5 p-8">
+        <div class="flex items-center justify-between mb-8">
+            <h3 class="text-xl font-bold font-heading uppercase text-white tracking-wide">Son Ödemeler</h3>
+            <a href="{% url 'crm_payment_list' %}"
+                class="text-accent text-sm font-bold uppercase tracking-widest hover:text-white transition-colors">Tümü</a>
+        </div>
+
+        <div class="flex-1" id="dash-payments-container">
+            {% include 'crm/partials/_dash_payments.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Messages Load More
+        const msgsContainer = document.getElementById('dash-messages-container');
+        if (msgsContainer) {
+            msgsContainer.addEventListener('click', function (e) {
+                const btn = e.target.closest('.dash-msg-load-more');
+                if (btn) {
+                    e.preventDefault();
+                    const url = btn.getAttribute('data-url');
+                    const btnOriginalText = btn.innerHTML;
+                    btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Yükleniyor...`;
+                    btn.disabled = true;
+
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(r => r.text())
+                        .then(html => {
+                            const currentWrap = document.getElementById('messages-load-more');
+                            if (currentWrap) currentWrap.remove();
+                            msgsContainer.insertAdjacentHTML('beforeend', html);
+                        });
+                }
+            });
+        }
+
+        // Payments Load More
+        const payContainer = document.getElementById('dash-payments-container');
+        if (payContainer) {
+            payContainer.addEventListener('click', function (e) {
+                const btn = e.target.closest('.dash-pmt-load-more');
+                if (btn) {
+                    e.preventDefault();
+                    const url = btn.getAttribute('data-url');
+                    const btnOriginalText = btn.innerHTML;
+                    btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Yükleniyor...`;
+                    btn.disabled = true;
+
+                    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(r => r.text())
+                        .then(html => {
+                            const currentWrap = document.getElementById('payments-load-more');
+                            if (currentWrap) currentWrap.remove();
+                            payContainer.insertAdjacentHTML('beforeend', html);
+                        });
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
