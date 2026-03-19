@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection
+from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection, BlogPost
 
 @admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
@@ -56,3 +56,9 @@ class ContactMessageAdmin(admin.ModelAdmin):
         updated = queryset.update(is_replied=True)
         self.message_user(request, f"{updated} mesaj 'Dönüş Yapıldı' olarak işaretlendi.")
     mark_as_replied.short_description = "Seçili mesajları 'Dönüş Yapıldı' işaretle"
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title', 'content')

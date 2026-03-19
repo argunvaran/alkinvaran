@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} | Alkin Varan Blog{% endblock %}
+
+{% block head %}
+<meta name="description" content="{{ post.content|striptags|truncatechars:160 }}">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ post.title }} | Alkin Varan">
+<meta property="og:description" content="{{ post.content|striptags|truncatechars:160 }}">
+{% if post.image %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.image.url }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="pt-32 pb-24 bg-primary relative px-6 min-h-screen">
+
+    <div class="max-w-4xl mx-auto relative z-10">
+        <!-- Back Button -->
+        <a href="{% url 'blog_list' %}"
+            class="inline-flex items-center text-gray-400 hover:text-accent font-semibold transition-colors mb-10 group">
+            <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+            </svg>
+            Blog Öncesine Dön
+        </a>
+
+        <!-- Header -->
+        <div class="mb-12">
+            <p class="text-accent text-sm font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                    </path>
+                </svg>
+                {{ post.created_at|date:"d M, Y" }}
+            </p>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight mb-8">
+                {{ post.title }}
+            </h1>
+        </div>
+
+        <!-- Featured Image -->
+        <div
+            class="w-full h-[400px] md:h-[500px] mb-16 rounded-[2rem] overflow-hidden bg-secondary border border-white/5 relative shadow-2xl">
+            <img src="{{ post.display_image_url }}" alt="{{ post.title }}"
+                class="absolute inset-0 w-full h-full object-cover {% if not post.image %}grayscale opacity-90{% endif %}">
+        </div>
+
+        <!-- Content -->
+        <div class="prose prose-lg prose-invert max-w-none text-gray-300">
+            {{ post.content|linebreaks|safe }}
+        </div>
+
+        <!-- Divider -->
+        <div class="w-full h-px bg-white/10 my-20"></div>
+
+        <!-- Recent Posts Widget -->
+        {% if recent_posts %}
+        <div>
+            <span
+                class="text-accent font-bold uppercase tracking-widest text-sm flex items-center justify-start gap-3 mb-8">
+                <span class="w-8 h-px bg-accent"></span> Son Yazılar
+            </span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for recent in recent_posts %}
+                <a href="{% url 'blog_detail' recent.slug %}"
+                    class="block group bg-secondary rounded-3xl overflow-hidden border border-white/5 hover:border-accent/40 transition-all shadow-lg">
+                    <div class="h-40 bg-black relative">
+                        <img src="{{ recent.display_image_url }}" alt="{{ recent.title }}"
+                            class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700 {% if not recent.image %}grayscale group-hover:grayscale-0{% endif %}">
+                    </div>
+                    <div class="p-6">
+                        <h4
+                            class="text-white font-bold leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                            {{ recent.title }}</h4>
+                        <p class="text-gray-500 text-xs mt-3 uppercase tracking-wider font-semibold">{{ recent.created_at|date:"d M" }}</p>
+                            
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

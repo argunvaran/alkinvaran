@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection
+from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection, BlogPost
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator
@@ -131,3 +131,78 @@ def manage_images(request):
         'studios': studios,
     }
     return render(request, 'website/manage_images.html', context)
+
+def blog_list(request):
+    from django.utils import timezone
+    from django.db.models import Q
+    query = request.GET.get('q', '')
+    posts_list = BlogPost.objects.filter(created_at__lte=timezone.now()).order_by('-created_at')
+    
+    if query:
+        posts_list = posts_list.filter(Q(title__icontains=query) | Q(content__icontains=query))
+        
+    paginator = Paginator(posts_list, 6) # 6 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'website/blog_list.html', {'page_obj': page_obj, 'query': query})
+
+def blog_detail(request, slug):
+    from django.utils import timezone
+    post = get_object_or_404(BlogPost, slug=slug, created_at__lte=timezone.now())
+    # Get 3 recent posts excluding the current one
+    recent_posts = BlogPost.objects.filter(created_at__lte=timezone.now()).exclude(id=post.id).order_by('-created_at')[:3]
+    return render(request, 'website/blog_detail.html', {'post': post, 'recent_posts': recent_posts})
+
+# --- CRM Blog Yönetimi Yönlendirmeleri ---
+
+@user_passes_test(lambda u: u.is_superuser)
+def crm_blog_list(request):
+    posts = BlogPost.objects.all().order_by('-created_at')
+    return render(request, 'website/crm_blog_list.html', {'posts': posts})
+
+@user_passes_test(lambda u: u.is_superuser)
+def crm_blog_create(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        BlogPost.objects.create(title=title, content=content, image=image)
+        messages.success(request, f'"{title}" başarıyla eklendi!')
+        return redirect('crm_blog_list')
+    return render(request, 'website/crm_blog_form.html', {'title': 'Yeni Yazı Ekle'})
+
+@user_passes_test(lambda u: u.is_superuser)
+def crm_blog_update(request, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    if request.method == 'POST':
+        post.title = request.POST.get('title')
+        post.content = request.POST.get('content')
+        if 'image' in request.FILES:
+            post.image = request.FILES.get('image')
+        post.save()
+        messages.success(request, f'"{post.title}" başarıyla güncellendi!')
+        return redirect('crm_blog_list')
+    return render(request, 'website/crm_blog_form.html', {'post': post, 'title': 'Yazıyı Düzenle'})
+
+@user_passes_test(lambda u: u.is_superuser)
+def crm_blog_delete(request, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    if request.method == 'POST':
+        title = post.title
+        post.delete()
+        messages.success(request, f'"{title}" yazısı başarıyla silindi.')
+    return redirect('crm_blog_list')
+
+@user_passes_test(lambda u: u.is_superuser)
+def crm_blog_publish_next(request):
+    from django.utils import timezone
+    if request.method == 'POST':
+        # Find the earliest scheduled post that hasn't been published yet
+        next_post = BlogPost.objects.filter(created_at__gt=timezone.now()).order_by('created_at').first()
+        if next_post:
+            next_post.created_at = timezone.now()
+            next_post.save()
+            messages.success(request, f'Sıradaki bekleyen yazı olan "{next_post.title}" başarıyla şu an yayınlandı!')
+        else:
+            messages.warning(request, 'Sırada bekleyen (zamanlanmış) herhangi bir yazı bulunmuyor.')
+    return redirect('crm_blog_list')

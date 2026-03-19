@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alkin Varan - Blog & Makaleler{% endblock %}
+
+{% block content %}
+
+<br>
+<br>
+
+
+<section class="min-h-screen pt-32 pb-24 bg-primary relative px-6">
+    <!-- Ambient Glow -->
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[150px] pointer-events-none">
+    </div>
+
+    <div class="container mx-auto relative z-10">
+        <div class="text-center mb-16">
+            <span
+                class="text-accent font-bold uppercase tracking-widest text-sm flex items-center justify-center gap-3">
+                <span class="w-8 h-px bg-accent"></span> Bilgi & Hareket <span class="w-8 h-px bg-accent"></span>
+            </span>
+            <h1 class="text-4xl md:text-6xl font-heading font-black mt-4 text-white">BLOG <span
+                    class="text-accent">&</span> MAKALELER</h1>
+            <p class="text-gray-400 mt-4 max-w-2xl mx-auto text-lg leading-relaxed">
+                Antrenman bilimlerinden, cimnastik temellerine; sağlıklı yaşam ve hareket kabiliyeti üzerine güncel
+                yazılar.
+            </p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-12 max-w-2xl mx-auto">
+            <form method="GET" action="{% url 'blog_list' %}" class="relative">
+                <input type="text" name="q" value="{{ query }}" placeholder="Blog yazılarında ara..."
+                    class="w-full bg-secondary border border-white/10 rounded-full pl-14 pr-6 py-4 text-white focus:outline-none focus:border-accent transition-colors shadow-lg">
+                <svg class="w-6 h-6 absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </form>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {% for post in page_obj %}
+            <a href="{% url 'blog_detail' post.slug %}"
+                class="group block overflow-hidden rounded-[2rem] bg-secondary border border-white/5 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-accent/20 hover:border-accent/40 flex flex-col h-full">
+                <!-- Cover Image -->
+                <div class="relative h-64 overflow-hidden bg-black shrink-0 border-b border-white/5">
+                    <img src="{{ post.display_image_url }}" alt="{{ post.title }}"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 {% if not post.image %}grayscale group-hover:grayscale-0{% endif %}">
+                </div>
+
+                <!-- Content -->
+                <div class="p-8 flex flex-col flex-grow relative bg-secondary">
+                    <p class="text-accent text-xs font-bold uppercase tracking-widest mb-3 opacity-80">{{
+                        post.created_at|date:"d M, Y" }}</p>
+
+                    <h3
+                        class="text-2xl font-heading font-black text-white group-hover:text-accent transition-colors mb-4 line-clamp-2">
+                        {{ post.title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3">
+                        {{ post.content|striptags }}
+                    </p>
+
+                    <div
+                        class="mt-auto flex items-center text-sm font-bold text-white group-hover:text-accent transition-colors">
+                        Devamını Oku
+                        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="col-span-full text-center py-20 bg-secondary rounded-[2rem] border border-white/5">
+                <span class="text-gray-500 font-medium text-lg">Henüz hiç blog yazısı eklenmemiş.</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="flex justify-center gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"
+                class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-accent hover:border-accent transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span
+                class="w-12 h-12 rounded-full border border-accent bg-accent flex items-center justify-center text-white font-bold">{{
+                num }}</span>
+
+            {% else %}
+            <a href="?page={{ num }}"
+                class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all">{{
+                num }}</a>
+
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"
+                class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-accent hover:border-accent transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

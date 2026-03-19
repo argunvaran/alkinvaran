@@ -1,0 +1,171 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block title %}Blog Yönetimi{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8">
+    <div>
+        <h2 class="text-3xl font-heading font-black">Blog Yönetimi</h2>
+        <p class="text-gray-400 mt-1">Blog yazılarınızı buradan ekleyebilir, düzenleyebilir veya silebilirsiniz.</p>
+    </div>
+    <div class="flex gap-4">
+        <form method="POST" action="{% url 'crm_blog_publish_next' %}" class="inline"
+            onsubmit="return confirm('Sırada bekleyen ilk zamanlanmış yazıyı anında şimdi yayınlamak istediğinize emin misiniz?');">
+            {% csrf_token %}
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                Sıradaki Yazıyı Hemen Yayınla
+            </button>
+        </form>
+        <a href="{% url 'crm_blog_create' %}"
+            class="bg-accent hover:bg-accent-dark text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Yeni Yazı Ekle
+        </a>
+    </div>
+</div>
+
+<!-- CRM Search Bar -->
+<div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between">
+    <div class="relative w-full max-w-md">
+        <input type="text" id="crmSearch" placeholder="Yazı başlıklarında canlı ara..."
+            class="w-full bg-secondary border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white focus:outline-none focus:border-accent transition-colors shadow-lg">
+        <svg class="w-5 h-5 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+    </div>
+</div>
+
+<div class="bg-secondary rounded-2xl border border-white/5 overflow-hidden">
+    <table class="w-full text-left border-collapse">
+        <thead class="bg-primary/50 text-gray-400 uppercase tracking-widest text-xs">
+            <tr>
+                <th class="py-4 px-6 border-b border-white/5 font-bold">Yazı Başlığı</th>
+                <th class="py-4 px-6 border-b border-white/5 font-bold w-48">Eklenme Tarihi</th>
+                <th class="py-4 px-6 border-b border-white/5 font-bold text-right w-48">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody id="postsTableBody">
+            {% for post in posts %}
+            <tr class="hover:bg-white/5 transition-colors group post-row" data-title="{{ post.title|lower }}">
+                <td class="py-4 px-6 border-b border-white/5">
+                    <div class="flex items-center gap-4">
+                        <img src="{{ post.display_image_url }}" alt=""
+                            class="w-12 h-12 rounded-lg object-cover {% if not post.image %}grayscale opacity-50{% endif %}">
+                        <div>
+                            <p
+                                class="font-bold text-white group-hover:text-accent transition-colors line-clamp-1 truncate pr-4">
+                                {{ post.title }}</p>
+                            <a href="{% url 'blog_detail' post.slug %}" target="_blank"
+                                class="text-xs text-gray-500 hover:text-white inline-flex items-center gap-1 mt-1">
+                                Sitede Gör
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+                <td class="py-4 px-6 border-b border-white/5 text-gray-400 text-sm">
+                    {{ post.created_at|date:"d M Y, H:i" }}
+                </td>
+                <td class="py-4 px-6 border-b border-white/5 text-right space-x-2 flex justify-end">
+                    <a href="{% url 'crm_blog_update' post.pk %}"
+                        class="w-10 h-10 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 flex items-center justify-center transition-colors tooltip-wrapper"
+                        title="Düzenle">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                            </path>
+                        </svg>
+                    </a>
+
+                    <form method="POST" action="{% url 'crm_blog_delete' post.pk %}" class="inline"
+                        onsubmit="return confirm('Bu yazıyı silmek istediğinize emin misiniz?');">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="w-10 h-10 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 flex items-center justify-center transition-colors"
+                            title="Sil">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="py-12 px-6 text-center text-gray-500 bg-white/5 italic">
+                    Henüz hiç blog yazısı eklenmemiş. Yeni Yazı Ekle butonunu kullanarak ilk yazınızı yayınlayın!
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="loadMoreBtn"
+        class="text-center py-5 cursor-pointer text-accent hover:text-white font-bold uppercase tracking-widest text-xs border-t border-white/5 bg-primary/20 transition-colors"
+        style="display: none;">
+        Daha Fazla Göster
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('crmSearch');
+        const rows = document.querySelectorAll('.post-row');
+        let displayedCount = 10;
+
+        function filterAndLazyLoad() {
+            const query = searchInput.value.toLowerCase();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const title = row.getAttribute('data-title');
+                if (title.includes(query)) {
+                    if (visibleCount < displayedCount) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none'; // Lazy load hidden
+                    }
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none'; // Search hidden
+                }
+            });
+
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (visibleCount > displayedCount) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        searchInput.addEventListener('input', function () {
+            displayedCount = 10; // Reset pagination on search
+            filterAndLazyLoad();
+        });
+
+        document.getElementById('loadMoreBtn').addEventListener('click', function () {
+            displayedCount += 10;
+            filterAndLazyLoad();
+        });
+
+        // Initial run
+        filterAndLazyLoad();
+    });
+</script>
+{% endblock %}

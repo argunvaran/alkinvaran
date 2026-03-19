@@ -1,11 +1,41 @@
 from django.db import models
+from django.utils.text import slugify
+from django.core.files.base import ContentFile
+from PIL import Image
+import io
+import os
 
+def convert_to_webp(image_field, max_size=1920):
+    if not image_field:
+        return
+    if image_field.name.lower().endswith('.webp'):
+        return
+    try:
+        img = Image.open(image_field)
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+        if img.width > max_size or img.height > max_size:
+            img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
+        
+        output = io.BytesIO()
+        img.save(output, format='WEBP', quality=85)
+        output.seek(0)
+        
+        name = os.path.splitext(os.path.basename(image_field.name))[0] + '.webp'
+        image_field.save(name, ContentFile(output.read()), save=False)
+    except Exception as e:
+        pass
 class HeroSection(models.Model):
     title = models.CharField(max_length=200, verbose_name="Başlık")
     subtitle = models.TextField(verbose_name="Alt Başlık")
     video_url = models.URLField(blank=True, null=True, verbose_name="Video URL (Opsiyonel)")
     background_image = models.ImageField(upload_to='hero/', blank=True, null=True, verbose_name="Arka Plan Görseli")
     button_text = models.CharField(max_length=50, default="Bize Ulaşın", verbose_name="Buton Metni")
+
+    def save(self, *args, **kwargs):
+        if self.background_image:
+            convert_to_webp(self.background_image)
+        super().save(*args, **kwargs)
 
     @property
     def has_image(self):
@@ -24,6 +54,10 @@ class AboutSection(models.Model):
     content = models.TextField(default="Ben Alkin Varan...", verbose_name="Hakkımda İçeriği")
     portrait_image = models.ImageField(upload_to='about/', blank=True, null=True, verbose_name="Hakkımda Profil Görseli")
     
+    def save(self, *args, **kwargs):
+        if self.portrait_image:
+            convert_to_webp(self.portrait_image)
+        super().save(*args, **kwargs)
     @property
     def has_image(self):
         return bool(self.portrait_image and self.portrait_image.storage.exists(self.portrait_image.name))
@@ -37,6 +71,11 @@ class Discipline(models.Model):
     description = models.TextField(verbose_name="Açıklama")
     image = models.ImageField(upload_to='disciplines/', blank=True, null=True, verbose_name="Görsel")
     order = models.PositiveIntegerField(default=0, verbose_name="Sıralama")
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
 
     @property
     def has_image(self):
@@ -76,6 +115,11 @@ class Studio(models.Model):
     instagram_link = models.URLField(blank=True, null=True, verbose_name="Instagram Linki")
     map_link = models.URLField(blank=True, null=True, verbose_name="Google Harita Linki")
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
+
     @property
     def has_image(self):
         return bool(self.image and self.image.storage.exists(self.image.name))
@@ -107,3 +151,44 @@ class ContactMessage(models.Model):
         ordering = ['-created_at']
         verbose_name = "Danışan/İletişim Mesajı"
         verbose_name_plural = "Gelen Kutusu (CRM)"
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Başlık")
+    slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name="SEO URL (Otomatik Dolur)")
+    content = models.TextField(verbose_name="Metin/İçerik")
+    image = models.ImageField(upload_to='blog/', blank=True, null=True, verbose_name="Kapak Görseli")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Yazılma Tarihi")
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        if self.image:
+            convert_to_webp(self.image)
+        super().save(*args, **kwargs)
+
+    @property
+    def display_image_url(self):
+        if self.image:
+            return self.image.url
+        DEFAULT_IMAGES = [
+            "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1434682881908-b43d0467b798?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop",
+        ]
+        index = (self.id if self.id else len(self.slug)) % len(DEFAULT_IMAGES)
+        return DEFAULT_IMAGES[index]
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Blog Yazısı"
+        verbose_name_plural = "Blog Yazıları"

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /crm/
+
+# Google'a doğrudan sitemizin haritasını nerede bulacağını söylüyoruz
+Sitemap: https://alkinvaran.com/sitemap.xml

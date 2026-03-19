@@ -5,8 +5,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Alkin Varan | Personal Excellence & Movement{% endblock %}</title>
-    <meta name="description" content="Alkin Varan personal branding website - Movement, Training, and Aesthetics.">
+    <title>{% block title %}Alkin Varan | Kişisel Antrenör & Cimnastik Koçu{% endblock %}</title>
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
+    <meta name="description"
+        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu. Ataşehir Focus Studio PT.">
+    <meta name="keywords"
+        content="Alkin Varan, kişisel antrenör, personal trainer, cimnastik koçu, movement, hareket kabiliyeti, fonksiyonel antrenman, fitness İstanbul, gym, PT, Ataşehir">
+    <meta name="author" content="Alkin Varan">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alkinvaran.com/">
+    <meta property="og:title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
+    <meta property="og:description"
+        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu.">
+    <meta property="og:image" content="https://alkinvaran.com{% static 'favicon.png' %}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://alkinvaran.com/">
+    <meta property="twitter:title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
+    <meta property="twitter:description"
+        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu.">
+    <meta property="twitter:image" content="https://alkinvaran.com{% static 'favicon.png' %}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
@@ -94,19 +117,21 @@
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-nav py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="/"
-                class="text-2xl font-heading font-black tracking-tighter hover:text-accent transition-colors flex items-center gap-2">
+                class="text-2xl md:text-3xl font-heading font-black tracking-tighter hover:text-accent transition-colors flex items-center gap-3">
                 ALKIN<span class="text-accent">VARAN</span>
                 <img src="{% static 'favicon.png' %}" alt="Alkin Varan Logo"
-                    class="w-12 h-12 object-contain hover:scale-105 transition-transform duration-300">
+                    class="w-24 h-24 md:w-32 md:h-32 object-contain hover:scale-105 transition-transform duration-300">
             </a>
 
-            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide uppercase">
-                <a href="#about" class="hover:text-accent transition-colors">Hakkımda</a>
-                <a href="#disciplines" class="hover:text-accent transition-colors">Disiplinler</a>
-                <a href="#levels" class="hover:text-accent transition-colors">Seviyeler</a>
-                <a href="#studios" class="hover:text-accent transition-colors">Stüdyolar</a>
-                <a href="#contact"
-                    class="px-5 py-2 bg-accent hover:bg-accent-dark rounded-full transition-all">İletişim</a>
+            <div
+                class="hidden md:flex flex-wrap space-x-4 lg:space-x-8 text-sm font-semibold tracking-wide uppercase items-center">
+                <a href="/#about" class="hover:text-accent transition-colors">Hakkımda</a>
+                <a href="/#disciplines" class="hover:text-accent transition-colors">Disiplinler</a>
+                <a href="/#levels" class="hover:text-accent transition-colors">Seviyeler</a>
+                <a href="/#studios" class="hover:text-accent transition-colors">Stüdyolar</a>
+                <a href="/blog/" class="hover:text-accent transition-colors text-accent">Blog</a>
+                <a href="/#contact"
+                    class="px-5 py-2 bg-accent hover:bg-accent-dark text-white rounded-full transition-all">İletişim</a>
             </div>
 
             <!-- Mobile Menu Toggle -->
@@ -121,11 +146,12 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu"
             class="hidden md:hidden absolute top-full left-0 w-full bg-secondary border-b border-white/10 px-6 py-6 flex flex-col space-y-4">
-            <a href="#about" class="text-lg font-semibold hover:text-accent">Hakkımda</a>
-            <a href="#disciplines" class="text-lg font-semibold hover:text-accent">Disiplinler</a>
-            <a href="#levels" class="text-lg font-semibold hover:text-accent">Seviyeler</a>
-            <a href="#studios" class="text-lg font-semibold hover:text-accent">Stüdyolar</a>
-            <a href="#contact" class="text-lg font-semibold text-accent">İletişim</a>
+            <a href="/#about" class="text-lg font-semibold hover:text-accent">Hakkımda</a>
+            <a href="/#disciplines" class="text-lg font-semibold hover:text-accent">Disiplinler</a>
+            <a href="/#levels" class="text-lg font-semibold hover:text-accent">Seviyeler</a>
+            <a href="/#studios" class="text-lg font-semibold hover:text-accent">Stüdyolar</a>
+            <a href="/blog/" class="text-lg font-semibold hover:text-accent text-accent">Blog</a>
+            <a href="/#contact" class="text-lg font-semibold text-accent">İletişim</a>
         </div>
     </nav>
 

@@ -16,11 +16,13 @@
 
     <div class="relative z-10 container mx-auto px-6 text-center h-full flex flex-col justify-between pt-32 pb-48">
         <!-- Top Half: Title and Subtitle -->
-        <div class="mt-8 md:mt-16">
+        <div class="mt-8 md:mt-16 flex flex-col items-center">
             <h1
-                class="text-5xl md:text-8xl font-heading font-black tracking-tight leading-none animate-fade-in drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] mb-6">
+                class="flex flex-col items-center text-5xl md:text-8xl font-heading font-black tracking-tight leading-none animate-fade-in drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] mb-6">
                 {% if hero.title %}{{ hero.title|safe }}{% else %}POTANSİYELİNİ <span
                     class="text-accent underline decoration-4">ŞEKİLLENDİR</span>{% endif %}
+                <span class="sr-only">Alkin Varan - Özel Cimnastik Koçu ve Profesyonel Kişisel Antrenör (Personal
+                    Trainer)</span>
             </h1>
             <p
                 class="text-xl md:text-2xl text-white max-w-2xl mx-auto font-bold tracking-wide leading-relaxed drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
@@ -32,13 +34,13 @@
 
         <!-- Bottom Half: Buttons -->
         <div>
-            <div class="flex flex-col md:flex-row items-center justify-center gap-4">
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 w-full">
                 <a href="#contact"
-                    class="px-8 py-4 bg-accent hover:bg-accent-dark text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-[0_4px_20px_rgba(59,130,246,0.4)]">
+                    class="w-full md:w-auto px-8 py-5 md:py-4 bg-accent hover:bg-accent-dark text-white font-bold rounded-full transition-all transform hover:scale-105 shadow-[0_4px_20px_rgba(59,130,246,0.4)] block text-center">
                     {% if hero.button_text %}{{ hero.button_text }}{% else %}Şimdi Başlayın{% endif %}
                 </a>
                 <a href="#disciplines"
-                    class="px-8 py-4 bg-black/40 hover:bg-black/60 text-white font-bold rounded-full backdrop-blur transition-all border border-white/20">
+                    class="w-full md:w-auto px-8 py-5 md:py-4 bg-black/40 hover:bg-black/60 text-white font-bold rounded-full backdrop-blur transition-all border border-white/20 block text-center">
                     Daha Fazla Bilgi
                 </a>
             </div>
@@ -111,6 +113,7 @@
                     class="text-4xl md:text-5xl lg:text-5xl font-heading font-black mt-4 mb-8 uppercase leading-tight text-white">
                     {{ about.title }} <br /><span
                         class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">{{ about.highlight_title }}</span>
+                        
                 </h2>
 
                 <div class="space-y-6 text-gray-400 text-lg leading-relaxed font-light mb-12">
@@ -178,7 +181,7 @@
                     {% else %}
                     <div
                         class="absolute inset-0 bg-gradient-to-br from-accent/20 to-secondary transition-transform duration-700 group-hover:scale-105">
-                        <div
+                        <div role="img" aria-label="Disiplin Arka Plan Görseli"
                             class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay grayscale transition-opacity duration-300 group-hover:opacity-30">
                         </div>
                     </div>

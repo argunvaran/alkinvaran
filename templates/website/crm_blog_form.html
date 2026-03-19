@@ -1,0 +1,60 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - Blog Yönetimi{% endblock %}
+
+{% block content %}
+<a href="{% url 'crm_blog_list' %}"
+    class="inline-flex items-center text-gray-400 hover:text-white transition-colors mb-6 text-sm font-semibold tracking-wide uppercase">
+    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Yazılara Dön
+</a>
+
+<h2 class="text-3xl font-heading font-black mb-8">{{ title }}</h2>
+
+<form method="POST" enctype="multipart/form-data" class="bg-secondary p-8 rounded-2xl border border-white/5 max-w-3xl">
+    {% csrf_token %}
+
+    <div class="mb-6">
+        <label class="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">Yazı Başlığı</label>
+        <input type="text" name="title" required value="{{ post.title|default:'' }}"
+            class="w-full bg-primary border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-accent">
+    </div>
+
+    <!-- The content textarea should ideally use a rich text editor if possible, but basic text works. -->
+    <div class="mb-6">
+        <label class="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">İçerik</label>
+        <textarea name="content" rows="12" required
+            class="w-full bg-primary border border-white/10 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-accent">{{ post.content|default:'' }}</textarea>
+        <p class="text-xs text-gray-500 mt-2">İçerik için HTML karakterleri desteklenmektedir, isterseniz satır başı
+            yapabilirsiniz.</p>
+    </div>
+
+    <div class="mb-10">
+        <label class="block text-sm font-bold text-gray-400 mb-2 tracking-wide uppercase">Kapak Görseli</label>
+
+        {% if post.image %}
+        <div class="mb-4">
+            <p class="text-sm text-gray-400 mb-2">Mevcut Görsel:</p>
+            <img src="{{ post.image.url }}" alt="Current" class="h-32 rounded-xl object-cover border border-white/10">
+        </div>
+        {% endif %}
+
+        <input type="file" name="image" accept="image/*"
+            class="w-full file:mr-4 file:py-3 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-white/5 text-gray-400">
+        <p class="text-xs text-gray-400 mt-2">İsteğe bağlı. Görsel seçmezseniz sistem tarafından cimnastik temalı genel
+            bir görsel eklenecektir.</p>
+    </div>
+
+    <button type="submit"
+        class="w-full bg-accent hover:bg-accent-dark text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform hover:scale-[1.02] flex justify-center items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+        </svg>
+        Yazıyı Kaydet
+    </button>
+</form>
+{% endblock %}
