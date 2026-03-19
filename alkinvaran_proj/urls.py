@@ -20,7 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+from django.http import HttpResponse
+
 urlpatterns = [
+    path('google2935ea39ec096b47.html', lambda r: HttpResponse("google-site-verification: google2935ea39ec096b47.html", content_type="text/html")),
     path('alkin-gizli-yonetim/', admin.site.urls), # Hide the generic admin
     path('panel/', include('crm.urls')),           # Our custom admin panel
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
