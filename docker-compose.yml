@@ -1,19 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres:15
-    container_name: alkinvaran_db
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-
   web:
     build: .
     container_name: alkinvaran_web
@@ -23,12 +10,13 @@ services:
                python manage.py migrate &&
                gunicorn alkinvaran_proj.wsgi:application --bind 0.0.0.0:8000 --workers 3"
     volumes:
+      - sqlite_volume:/app/data
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     env_file:
       - .env
-    depends_on:
-      - db
+    environment:
+      - SQLITE_DB_PATH=/app/data/db.sqlite3
 
   nginx:
     image: nginx:1.25
@@ -45,6 +33,6 @@ services:
       - web
 
 volumes:
-  postgres_data:
+  sqlite_volume:
   static_volume:
   media_volume:

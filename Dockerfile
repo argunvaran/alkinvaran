@@ -8,9 +8,9 @@ ENV PYTHONUNBUFFERED 1
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies for psycopg2 and Pillow
+# Install system dependencies for Pillow and sqlite
 RUN apt-get update \
-    && apt-get install -y gcc libpq-dev zlib1g-dev libjpeg-dev \
+    && apt-get install -y gcc zlib1g-dev libjpeg-dev sqlite3 \
     && apt-get clean
 
 # Install python dependencies
