@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection, BlogPost
+from .models import HeroSection, Discipline, TrainingLevel, Studio, ContactMessage, AboutSection, BlogPost, AppNotification
 
 @admin.register(HeroSection)
 class HeroSectionAdmin(admin.ModelAdmin):
@@ -62,3 +62,9 @@ class BlogPostAdmin(admin.ModelAdmin):
     list_display = ('title', 'created_at')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'content')
+
+@admin.register(AppNotification)
+class AppNotificationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'device_id', 'is_read', 'created_at')
+    list_filter = ('is_read', 'created_at')
+    search_fields = ('title', 'device_id', 'message')

@@ -5,43 +5,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Alkin Varan | Kişisel Antrenör & Cimnastik Koçu{% endblock %}</title>
+    <title>{% block title %} Alkın Varan | Cimnastik & Atletik Performans Eğitimi {% endblock %}</title>
 
-    <!-- Primary Meta Tags -->
-    <meta name="title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
+    <meta name="title" content="Alkın Varan | Cimnastik & Atletik Performans Eğitimi">
     <meta name="description"
-        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu. Ataşehir Focus Studio PT.">
+        content="Alkın Varan ile hareketin sınırlarını keşfedin. Profesyonel cimnastik, atletik performans antrenmanları ve elit düzey kişisel fitness koçluğu programları.">
     <meta name="keywords"
-        content="Alkin Varan, kişisel antrenör, personal trainer, cimnastik koçu, movement, hareket kabiliyeti, fonksiyonel antrenman, fitness İstanbul, gym, PT, Ataşehir">
-    <meta name="author" content="Alkin Varan">
+        content="Alkın Varan, cimnastik, atletik performans, Alkin Varan cimnastik, kişisel antrenör, personal trainer, movement, fitness İstanbul">
+    <meta name="author" content="Alkın Varan">
 
-    <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alkinvaran.com/">
-    <meta property="og:title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
+    <meta property="og:title" content="Alkın Varan | Cimnastik & Atletik Performans Eğitimi">
     <meta property="og:description"
-        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu.">
+        content="Alkın Varan ile hareketin sınırlarını keşfedin. Profesyonel cimnastik, atletik performans antrenmanları ve elit düzey kişisel koçluk.">
     <meta property="og:image" content="https://alkinvaran.com{% static 'favicon.png' %}">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://alkinvaran.com/">
-    <meta property="twitter:title" content="Alkin Varan | Kişisel Antrenör & Cimnastik Koçu">
-    <meta property="twitter:description"
-        content="Alkin Varan ile hareketin sınırlarını keşfedin. Kişisel antrenman, cimnastik ve elit fitness koçluğu.">
-    <meta property="twitter:image" content="https://alkinvaran.com{% static 'favicon.png' %}">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@300;400;600;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;600;800;900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -59,7 +47,7 @@
                     },
                     fontFamily: {
                         'sans': ['Inter', 'sans-serif'],
-                        'heading': ['Poppins', 'sans-serif'],
+                        'heading': ['Outfit', 'sans-serif'],
                     }
                 }
             }
@@ -80,25 +68,40 @@
             -webkit-text-fill-color: transparent;
             color: transparent;
         }
+
+        .toast-item {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
     </style>
     {% block head %}{% endblock %}
 </head>
 
-<body class="bg-primary text-white font-sans selection:bg-accent selection:text-white">
+<body class="bg-primary text-white font-sans selection:bg-accent selection:text-white overflow-x-hidden">
 
-    <!-- Global Notifications (Toasts) -->
     {% if messages %}
     <div id="toast-container" class="fixed top-24 right-6 z-[100] flex flex-col space-y-4">
         {% for message in messages %}
         <div
-            class="bg-green-600/90 backdrop-blur-md border border-green-500/50 text-white p-5 rounded-2xl shadow-[0_10px_40px_rgba(22,163,74,0.4)] flex items-start gap-4 transform transition-all duration-500 translate-x-0 toast-item">
+            class="bg-green-600/90 backdrop-blur-md border border-green-500/50 text-white p-5 rounded-2xl shadow-[0_10px_40px_rgba(22,163,74,0.4)] flex items-start gap-4 transition-all duration-500 toast-item">
             <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
             <div>
-                <h4 class="font-bold text-lg leading-tight mb-1">Harika!</h4>
+                <h4 class="font-bold text-lg leading-tight mb-1">Başarılı!</h4>
                 <p class="text-green-50 font-medium">{{ message }}</p>
             </div>
             <button onclick="this.parentElement.remove()"
@@ -113,118 +116,129 @@
     </div>
     {% endif %}
 
-    <!-- Navigation -->
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 glass-nav py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="/" class="hover:text-accent transition-colors flex items-center">
                 <img src="{% static 'favicon.png' %}" alt="Alkin Varan Logo"
-                    class="w-24 h-24 md:w-32 md:h-32 object-contain hover:scale-105 transition-transform duration-300">
+                    class="w-16 h-16 md:w-20 md:h-20 object-contain hover:scale-105 transition-transform duration-300">
             </a>
 
             <div
-                class="hidden md:flex flex-wrap space-x-4 lg:space-x-8 text-sm font-semibold tracking-wide uppercase items-center">
+                class="hidden md:flex flex-wrap space-x-4 lg:space-x-8 text-sm font-bold tracking-widest uppercase items-center">
                 <a href="/#about" class="hover:text-accent transition-colors">Hakkımda</a>
                 <a href="/#disciplines" class="hover:text-accent transition-colors">Disiplinler</a>
                 <a href="/#levels" class="hover:text-accent transition-colors">Seviyeler</a>
                 <a href="/#studios" class="hover:text-accent transition-colors">Stüdyolar</a>
-                <a href="/blog/" class="hover:text-accent transition-colors text-accent">Blog</a>
+                <a href="{% url 'blog_list' %}" class="hover:text-accent transition-colors text-accent">Blog</a>
                 <a href="/#contact"
-                    class="px-5 py-2 bg-accent hover:bg-accent-dark text-white rounded-full transition-all">İletişim</a>
+                    class="px-6 py-2.5 bg-accent hover:bg-accent-dark text-white rounded-full transition-all shadow-lg shadow-accent/20">İletişim</a>
             </div>
 
-            <!-- Mobile Menu Toggle -->
-            <button id="menu-toggle" class="md:hidden text-white focus:outline-none">
+            <button id="menu-toggle"
+                class="md:hidden text-white focus:outline-none p-2 border border-white/10 rounded-lg bg-white/5">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
-                    </path>
+                    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
         </div>
 
-        <!-- Mobile Menu -->
         <div id="mobile-menu"
-            class="hidden md:hidden absolute top-full left-0 w-full bg-secondary border-b border-white/10 px-6 py-6 flex flex-col space-y-4">
-            <a href="/#about" class="text-lg font-semibold hover:text-accent">Hakkımda</a>
-            <a href="/#disciplines" class="text-lg font-semibold hover:text-accent">Disiplinler</a>
-            <a href="/#levels" class="text-lg font-semibold hover:text-accent">Seviyeler</a>
-            <a href="/#studios" class="text-lg font-semibold hover:text-accent">Stüdyolar</a>
-            <a href="/blog/" class="text-lg font-semibold hover:text-accent text-accent">Blog</a>
-            <a href="/#contact" class="text-lg font-semibold text-accent">İletişim</a>
+            class="hidden md:hidden absolute top-full left-0 w-full bg-secondary/95 backdrop-blur-xl border-b border-white/10 px-6 py-8 flex flex-col space-y-5 shadow-2xl transition-all">
+            <a href="/#about"
+                class="text-xl font-bold uppercase tracking-widest hover:text-accent border-b border-white/5 pb-2">Hakkımda</a>
+            <a href="/#disciplines"
+                class="text-xl font-bold uppercase tracking-widest hover:text-accent border-b border-white/5 pb-2">Disiplinler</a>
+            <a href="/#levels"
+                class="text-xl font-bold uppercase tracking-widest hover:text-accent border-b border-white/5 pb-2">Seviyeler</a>
+            <a href="/#studios"
+                class="text-xl font-bold uppercase tracking-widest hover:text-accent border-b border-white/5 pb-2">Stüdyolar</a>
+            <a href="{% url 'blog_list' %}"
+                class="text-xl font-bold uppercase tracking-widest text-accent border-b border-white/5 pb-2">Blog</a>
+            <a href="/#contact"
+                class="text-xl font-bold uppercase tracking-widest text-center py-4 bg-accent rounded-2xl">İletişim</a>
         </div>
     </nav>
 
-    <main>
+    <main class="min-h-screen">
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-black py-12 border-t border-white/10">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-2xl font-heading font-bold mb-6">ALKIN<span class="text-accent">VARAN</span></h2>
-            <div class="flex justify-center space-x-6 mb-8">
+    <footer class="bg-black py-16 border-t border-white/10 relative overflow-hidden">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl font-heading font-black mb-8 tracking-tighter uppercase">
+                ALKIN<span class="text-accent">VARAN</span>
+            </h2>
+
+            <div class="flex justify-center space-x-8 mb-10">
                 <a href="https://www.instagram.com/alkinvaran/" target="_blank"
-                    class="text-gray-400 hover:text-white transition-colors" aria-label="Instagram">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
-                            clip-rule="evenodd" />
-                    </svg>
+                    class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-accent transition-all duration-300"
+                    aria-label="Instagram">
+                    <i class="fab fa-instagram text-xl"></i>
+                </a>
+                <a href="https://wa.me/905373973177" target="_blank"
+                    class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#25D366] transition-all duration-300"
+                    aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp text-xl"></i>
                 </a>
             </div>
-            <p class="text-gray-500 text-sm">&copy; {% now "Y" %} Alkin Varan. Tüm Hakları Saklıdır.</p>
+
+            <div
+                class="mb-8 opacity-50 text-sm font-medium tracking-widest uppercase flex flex-wrap justify-center gap-6">
+                <a href="/#about" class="hover:text-accent">Hakkımda</a>
+                <a href="/#disciplines" class="hover:text-accent">Disiplinler</a>
+                <a href="{% url 'blog_list' %}" class="hover:text-accent">Blog</a>
+                <a href="/#contact" class="hover:text-accent">İletişim</a>
+            </div>
+
+            <p class="text-gray-600 text-xs font-bold uppercase tracking-[0.2em]">&copy; {% now "Y" %} Alkın Varan. Tüm
+                Hakları Saklıdır.</p>
         </div>
     </footer>
 
-    <!-- Floating WhatsApp Button -->
     <div class="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[90] group flex items-center">
-        <!-- Tooltip -->
         <div
-            class="absolute right-full mr-4 bg-white text-black px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 w-max before:content-[''] before:absolute before:top-1/2 before:left-full before:-translate-y-1/2 before:border-8 before:border-transparent before:border-l-white">
-            Reach out for your questions
+            class="absolute right-full mr-4 bg-white text-black px-4 py-2 rounded-xl text-sm font-bold shadow-2xl opacity-0 translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 w-max border-b-4 border-accent">
+            Sorularınız için ulaşın
         </div>
 
-        <!-- Button -->
         <a href="https://wa.me/905373973177" target="_blank"
             class="relative flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-[0_10px_40px_rgba(37,211,102,0.5)] hover:-translate-y-2 hover:shadow-[0_15px_50px_rgba(37,211,102,0.8)] transition-all duration-300">
-            <!-- Ping animation on background -->
             <span class="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-30 animate-ping"></span>
-
-            <!-- Icon -->
-            <svg class="w-8 h-8 relative z-10" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                    d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-5.824 4.74-10.563 10.564-10.563 5.826 0 10.564 4.738 10.564 10.563 0 5.827-4.739 10.563-10.564 10.563z" />
-            </svg>
-
-            <!-- Red dot notification indicator -->
+            <i class="fab fa-whatsapp text-3xl relative z-10"></i>
             <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full border-2 border-primary"></span>
         </a>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
 
         menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            // İkonu değiştir (Hamburger / X)
+            menuIcon.setAttribute('d', isHidden ? 'M4 6h16M4 12h16M4 18h16' : 'M6 18L18 6M6 6l12 12');
         });
 
-        // Close menu when link clicked
+        // Menü linklerine tıklandığında menüyü kapat
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
             });
         });
 
+        // Navbar Scroll Effect
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
-                nav.classList.add('py-2');
+                nav.classList.add('py-2', 'shadow-2xl');
                 nav.classList.remove('py-4');
             } else {
                 nav.classList.add('py-4');
-                nav.classList.remove('py-2');
+                nav.classList.remove('py-2', 'shadow-2xl');
             }
         });
     </script>

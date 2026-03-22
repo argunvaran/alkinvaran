@@ -137,6 +137,7 @@ class ContactMessage(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefon Numarası")
     subject = models.CharField(max_length=200, verbose_name="Konu")
     message = models.TextField(verbose_name="Mesaj")
+    device_id = models.CharField(max_length=255, blank=True, null=True, verbose_name="Gizli Cihaz Kimliği")
     
     # CRM Tracking functionality
     is_replied = models.BooleanField(default=False, verbose_name="Dönüş Yapıldı")
@@ -151,6 +152,21 @@ class ContactMessage(models.Model):
         ordering = ['-created_at']
         verbose_name = "Danışan/İletişim Mesajı"
         verbose_name_plural = "Gelen Kutusu (CRM)"
+
+class AppNotification(models.Model):
+    device_id = models.CharField(max_length=255, verbose_name="Gizli Cihaz Kimliği")
+    title = models.CharField(max_length=200, verbose_name="Başlık")
+    message = models.TextField(verbose_name="Bildirim İçeriği")
+    is_read = models.BooleanField(default=False, verbose_name="Okundu mu?")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Tarih")
+    
+    def __str__(self):
+        return f"Bildirim: {self.title} -> {self.device_id[:8]}"
+        
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = "Uygulama İçi Bildirim"
+        verbose_name_plural = "Uygulama İçi Bildirimler"
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=200, verbose_name="Başlık")
@@ -171,16 +187,9 @@ class BlogPost(models.Model):
         if self.image:
             return self.image.url
         DEFAULT_IMAGES = [
-            "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1434682881908-b43d0467b798?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1200&auto=format&fit=crop",
+            "/media/blog_defaults/1.webp",
+            "/media/blog_defaults/2.webp",
+            "/media/blog_defaults/5.webp",
         ]
         index = (self.id if self.id else len(self.slug)) % len(DEFAULT_IMAGES)
         return DEFAULT_IMAGES[index]

@@ -434,6 +434,13 @@ def toggle_message_status(request, msg_id):
     msg.save()
     if msg.is_replied:
         messages.success(request, f"{msg.full_name} isimli kişinin mesajı 'Dönüş Yapıldı' olarak işaretlendi.")
+        if msg.device_id:
+            from website.models import AppNotification
+            AppNotification.objects.create(
+                device_id=msg.device_id,
+                title="Yeni Yanıt",
+                message=f"Merhaba {msg.full_name}, Alkin Varan talebinize dönüş yaptı! Özel bir bilgi içerebileceği ve güvenliğiniz sebebiyle cevabımızı kayıtlı Gelen Kutunuza veya WhatsApp üzerinden gönderdik. Lütfen kontrol ediniz."
+            )
     else:
         messages.warning(request, f"{msg.full_name} isimli kişinin mesajı 'Bekliyor' olarak değiştirildi.")
     return redirect('crm_inbox')
